@@ -1,0 +1,23 @@
+# Node
+node_modules/
+frontend/node_modules/
+
+# Build
+dist/
+frontend/dist/
+
+# Environment
+.env
+.env.*
+
+# PHP local database config
+backend/config/database.local.php
+
+# Upload hasil user
+backend/uploads/*
+
+# OS
+.DS_Store
+
+# Logs
+*.log

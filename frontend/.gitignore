@@ -1,0 +1,23 @@
+# Node
+node_modules/
+frontend/node_modules/
+
+# Build
+dist/
+frontend/dist/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# PHP uploads
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
