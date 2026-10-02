@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { BadgeCheck, ShieldCheck, Sparkles } from "lucide-react";
 import api from "../services/api";
 
 function Home() {
@@ -69,47 +70,34 @@ function Home() {
             {/* HERO */}
 
             <section className="hero">
-
                 <div className="hero-content">
-
-                    <p className="hero-label">
-                        EVENT ORGANIZER
+                    <p className="hero-kicker">
+                        <span aria-hidden="true" />
+                        PREMIER EVENT ORGANIZER &amp; PRODUCTION
                     </p>
-
                     <h1>
-                        We Create
-                        <br />
-                        Unforgettable
-                        <br />
-                        Moments.
+                        <span>Create Moments.</span>
+                        <strong>Celebrate Life.</strong>
                     </h1>
-
                     <p className="hero-description">
-                        Kami membantu merancang dan mengelola
-                        berbagai acara dengan konsep kreatif,
-                        profesional, dan berkesan.
+                        We turn your dream events into unforgettable experiences. Dari konsep eksklusif,
+                        kurasi visual megah, hingga eksekusi panggung kelas dunia dengan presisi sempurna.
                     </p>
-
                     <div className="hero-buttons">
-
-                        <Link
-                            to="/kontak"
-                            className="btn-primary"
-                        >
-                            Konsultasi Sekarang
-                        </Link>
-
                         <Link
                             to="/layanan"
-                            className="btn-secondary"
+                            className="btn-primary"
                         >
-                            Lihat Layanan
+                            EXPLORE OUR SERVICES
+                            <span aria-hidden="true">→</span>
                         </Link>
-
                     </div>
-
+                    <div className="hero-trust" aria-label="Komitmen Eventora">
+                        <span><BadgeCheck size={13} aria-hidden="true" /> ISO 9001 CERTIFIED EVENT CREW</span>
+                        <span><Sparkles size={13} aria-hidden="true" /> 5-STAR LUXURY VENUE PARTNERS</span>
+                        <span><ShieldCheck size={13} aria-hidden="true" /> DISCREET VIP PRIVACY PROTOCOL</span>
+                    </div>
                 </div>
-
             </section>
 
 

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 72" role="img" aria-labelledby="title">
+  <title id="title">Maqnet Kreasindo</title>
+  <rect width="240" height="72" fill="#fff" />
+  <g fill="#171717">
+    <path d="M13 15h10v42H13zM23 15h35v9H23zM23 31h26v9H23zM23 48h35v9H23z" />
+    <path d="M37 24h10v7H37zM49 39h9v9h-9z" />
+  </g>
+  <path fill="#ed7621" d="M25 24h12v7H25zM37 31h12v9H37zM25 40h12v8H25z" />
+  <text x="68" y="36" fill="#171717" font-family="Arial, Helvetica, sans-serif" font-size="25" font-weight="700" letter-spacing="1.3">MAQNET</text>
+  <text x="71" y="53" fill="#ed7621" font-family="Arial, Helvetica, sans-serif" font-size="10" font-weight="700" letter-spacing="4.1">KREASINDO</text>
+</svg>

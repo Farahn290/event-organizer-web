@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { ImagePlus } from "lucide-react";
+import { Link } from "react-router-dom";
 import api from "../services/api";
 
 function Galeri() {
@@ -81,98 +83,56 @@ function Galeri() {
 
             </section>
 
-            <section
-                style={{
-                    maxWidth: "1200px",
-                    margin: "0 auto",
-                    padding: "60px 20px"
-                }}
-            >
+            <section className="gallery-content">
 
                 {loading && (
-
-                    <p>
-                        Memuat galeri...
-                    </p>
-
+                    <p className="gallery-state" role="status">Memuat galeri...</p>
                 )}
 
                 {!loading && error && (
-
-                    <p>
-                        {error}
-                    </p>
-
+                    <p className="gallery-state" role="alert">{error}</p>
                 )}
 
-                {!loading &&
-                    !error &&
-                    galeri.length === 0 && (
+                {!loading && (
+                    <div className="gallery-grid">
 
-                        <p>
-                            Belum ada dokumentasi galeri.
-                        </p>
-
-                    )}
-
-                {!loading &&
-                    !error &&
-                    galeri.length > 0 && (
-
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "repeat(auto-fit, minmax(280px, 1fr))",
-                                gap: "25px"
-                            }}
-                        >
-
-                            {galeri.map((item) => (
-
-                                <div
-                                    key={item.id}
-                                    style={{
-                                        background: "#fff",
-                                        border: "1px solid #ddd",
-                                        overflow: "hidden"
-                                    }}
-                                >
-
-                                    <img
-                                        src={`http://localhost:8000/uploads/${item.gambar}`}
-                                        alt={item.judul}
-                                        style={{
-                                            width: "100%",
-                                            height: "220px",
-                                            objectFit: "cover",
-                                            display: "block"
-                                        }}
-                                    />
-
-                                    <div
-                                        style={{
-                                            padding: "20px"
-                                        }}
-                                    >
-
-                                        <h2>
-                                            {item.judul}
-                                        </h2>
-
-                                        <p>
-                                            {item.deskripsi}
-                                        </p>
-
-                                    </div>
-
+                        {galeri.map((item) => (
+                            <article className="gallery-photo-card" key={item.id}>
+                                <img
+                                    src={`http://localhost:8000/uploads/${item.gambar}`}
+                                    alt={item.judul}
+                                />
+                                <div className="gallery-photo-caption">
+                                    <h2>{item.judul}</h2>
+                                    {item.deskripsi && <p>{item.deskripsi}</p>}
                                 </div>
+                            </article>
+                        ))}
 
-                            ))}
+                        {Array.from(
+                            { length: Math.max(0, 9 - galeri.length) },
+                            (_, index) => {
+                                const slotNumber = galeri.length + index + 1;
 
-                        </div>
+                                return (
+                                    <Link
+                                        to="/admin"
+                                        className="gallery-upload-slot"
+                                        key={`gallery-slot-${slotNumber}`}
+                                        aria-label={`Tambah foto event ke slot ${slotNumber} melalui Admin`}
+                                    >
+                                        <span className="gallery-upload-icon">
+                                            <ImagePlus size={25} strokeWidth={1.5} aria-hidden="true" />
+                                        </span>
+                                        <strong>Slot foto {String(slotNumber).padStart(2, "0")}</strong>
+                                        <span>Tambah foto event melalui Admin</span>
+                                    </Link>
+                                );
+                            }
+                        )}
 
-                    )}
+                    </div>
+                )}
 
             </section>
 

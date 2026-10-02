@@ -1,3 +1,4 @@
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 function Tentang() {
@@ -7,137 +8,70 @@ function Tentang() {
         <div className="page about-page">
 
             {/* HEADER */}
-
-            <section className="about-hero">
-
-                <div>
-
-                    <p className="section-label">
-                        ABOUT EVENTORA
+            <section className="about-profile">
+                <div className="about-profile-copy">
+                    <p className="about-profile-eyebrow">
+                        <span aria-hidden="true">✦</span> ABOUT MAQNET KREASINDO
                     </p>
 
                     <h1>
-                        Menciptakan
+                        We Create
                         <br />
-                        Momen Yang
+                        <span>Unforgettable</span>
                         <br />
-                        Berkesan.
+                        Moments
                     </h1>
 
+                    <p className="about-profile-description">
+                        Maqnet is one of the leading event organizer companies in Indonesia, providing complete solutions in branding, marketing, communication, strategy, digital execution, events, and printing for major industry players.
+                    </p>
+
+                    <p className="about-profile-description">
+                        We prioritize integrity, strong teamwork, and innovation in every project, building trust with our clients and audiences.
+                    </p>
+
+                    <div className="about-profile-values">
+                        <article>
+                            <span>01</span>
+                            <h2>Visi Kami</h2>
+                            <p>Menjadi mitra event terpercaya dengan pengalaman kreatif dan standar eksekusi tinggi.</p>
+                        </article>
+                        <article>
+                            <span>02</span>
+                            <h2>Misi Kami</h2>
+                            <p>Menghadirkan konsep, produksi, dan layanan yang menyatukan setiap detail acara.</p>
+                        </article>
+                        <article>
+                            <span>03</span>
+                            <h2>Nilai Kami</h2>
+                            <p>Integritas, kolaborasi, inovasi, dan komitmen pada kualitas.</p>
+                        </article>
+                    </div>
+
+                    <Link to="/layanan" className="about-profile-link">
+                        LEARN MORE ABOUT OUR SERVICES <ArrowRight size={14} aria-hidden="true" />
+                    </Link>
                 </div>
 
-            </section>
-
-
-            {/* INTRODUCTION */}
-
-            <section className="about-intro">
-
-                <div>
-
-                    <p className="section-label">
-                        WHO WE ARE
-                    </p>
-
-                    <h2>
-                        Partner Profesional
-                        <br />
-                        Untuk Setiap Acara.
-                    </h2>
-
+                <div className="about-photo-grid" aria-label="Dokumentasi acara Maqnet Kreasindo">
+                    <img
+                        className="about-photo-featured"
+                        src="https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1000&q=85"
+                        alt="Suasana acara perusahaan di ballroom"
+                    />
+                    <img
+                        src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=85"
+                        alt="Dekorasi perayaan elegan"
+                    />
+                    <img
+                        src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=85"
+                        alt="Produksi konferensi dan panggung"
+                    />
+                    <img
+                        src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=85"
+                        alt="Jamuan acara di ballroom"
+                    />
                 </div>
-
-                <div>
-
-                    <p>
-                        Eventora adalah perusahaan Event Organizer
-                        yang hadir untuk membantu klien merancang,
-                        mempersiapkan, dan menjalankan berbagai
-                        jenis acara.
-                    </p>
-
-                    <p>
-                        Kami percaya bahwa setiap acara memiliki
-                        cerita dan karakter yang berbeda. Karena itu,
-                        kami menghadirkan konsep yang disesuaikan
-                        dengan kebutuhan dan tujuan setiap klien.
-                    </p>
-
-                    <p>
-                        Dengan perencanaan yang matang, kreativitas,
-                        dan koordinasi profesional, kami berusaha
-                        memastikan setiap detail acara dapat berjalan
-                        dengan baik.
-                    </p>
-
-                </div>
-
-            </section>
-
-
-            {/* VISI MISI */}
-
-            <section className="about-values">
-
-                <div className="value-box">
-
-                    <span>
-                        01
-                    </span>
-
-                    <h2>
-                        Visi
-                    </h2>
-
-                    <p>
-                        Menjadi perusahaan Event Organizer yang
-                        terpercaya dan mampu memberikan pengalaman
-                        acara yang kreatif, profesional, dan
-                        berkesan bagi setiap klien.
-                    </p>
-
-                </div>
-
-
-                <div className="value-box">
-
-                    <span>
-                        02
-                    </span>
-
-                    <h2>
-                        Misi
-                    </h2>
-
-                    <p>
-                        Memberikan layanan event yang profesional,
-                        mengembangkan konsep acara yang kreatif,
-                        serta membangun hubungan jangka panjang
-                        dengan klien melalui pelayanan terbaik.
-                    </p>
-
-                </div>
-
-
-                <div className="value-box">
-
-                    <span>
-                        03
-                    </span>
-
-                    <h2>
-                        Nilai Kami
-                    </h2>
-
-                    <p>
-                        Kreativitas, profesionalisme, komunikasi,
-                        tanggung jawab, dan perhatian terhadap
-                        setiap detail menjadi dasar dalam setiap
-                        acara yang kami kerjakan.
-                    </p>
-
-                </div>
-
             </section>
 
 

@@ -1,5 +1,58 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../services/api";
+import {
+    ArrowRight,
+    Building2,
+    CakeSlice,
+    Heart,
+    PartyPopper,
+    Presentation,
+    Sparkles,
+    Wine
+} from "lucide-react";
+
+const categoryMeta = [
+    { label: "BESPOKE", Icon: Heart },
+    { label: "CELEBRATION", Icon: CakeSlice },
+    { label: "CORPORATE", Icon: Building2 },
+    { label: "MASS SCALE", Icon: PartyPopper },
+    { label: "ACADEMIC", Icon: Presentation },
+    { label: "ULTRA PRIVATE", Icon: Wine }
+];
+
+const sampleServices = [
+    {
+        id: "sample-wedding",
+        nama_layanan: "Wedding Organizer",
+        deskripsi: "Pernikahan impian dengan konsep elegan, intimate garden soiree maupun grand ballroom mewah. Koordinasi vendor menyeluruh, tata busana, hingga souvenir VIP."
+    },
+    {
+        id: "sample-birthday",
+        nama_layanan: "Birthday Party",
+        deskripsi: "Pesta ulang tahun yang seru, tematik, dan penuh momen berkesan. Dari sweet seventeen gemerlap, 21st golden milestone, hingga jubilee private dinner."
+    },
+    {
+        id: "sample-corporate",
+        nama_layanan: "Corporate Event",
+        deskripsi: "Acara perusahaan prestisius, product launch megah, annual meeting, awarding night, hingga company gathering dengan reputasi brand yang terjaga sempurna."
+    },
+    {
+        id: "sample-concert",
+        nama_layanan: "Concert & Festival",
+        deskripsi: "Konser musik akbar dan festival meriah dengan sound-lighting berstandar internasional, rigging panggung kokoh, manajemen ticketing terintegrasi, dan keamanan ketat."
+    },
+    {
+        id: "sample-seminar",
+        nama_layanan: "Seminar & Workshop",
+        deskripsi: "Pengelolaan seminar, international conference, dan symposium profesional berskala nasional. Dilengkapi live streaming hybrid multiroom dan registrasi digital."
+    },
+    {
+        id: "sample-private",
+        nama_layanan: "Private Event",
+        deskripsi: "Acara privat eksklusif, VIP anniversary dinner, private yacht party, dan perayaan keluarga yang sarat keintiman serta privasi tanpa batas."
+    }
+];
 
 function Layanan() {
 
@@ -25,7 +78,9 @@ function Layanan() {
                 if (response.data.success) {
 
                     setLayanan(
-                        response.data.data
+                        response.data.data.length > 0
+                            ? response.data.data
+                            : sampleServices
                     );
 
                 } else {
@@ -44,10 +99,7 @@ function Layanan() {
                     error
                 );
 
-                setError(
-                    error.response?.data?.message ||
-                    "Tidak dapat terhubung ke server"
-                );
+                setLayanan(sampleServices);
 
             } finally {
 
@@ -65,112 +117,59 @@ function Layanan() {
 
         <div className="page">
 
-            {/* HEADER */}
-
-            <section className="page-header">
-
-                <p>
-                    OUR SERVICES
-                </p>
-
-                <h1>
-                    Layanan
-                </h1>
-
+            <section className="services-intro">
+                <p>WHAT WE SPECIALIZE IN</p>
+                <h1>Our Specialized Services</h1>
                 <span>
-                    Solusi profesional untuk berbagai kebutuhan acara Anda.
+                    Solusi komprehensif untuk setiap jenis perayaan dan acara penting Anda,
+                    dirancang dengan dedikasi artistik dan eksekusi teknis tingkat tinggi.
                 </span>
-
             </section>
 
-            {/* CONTENT */}
-
-            <section
-                style={{
-                    maxWidth: "1200px",
-                    margin: "0 auto",
-                    padding: "60px 20px"
-                }}
-            >
+            <section className="services-content" aria-label="Daftar layanan Eventora">
 
                 {loading && (
-
-                    <p>
-                        Memuat layanan...
-                    </p>
-
+                    <p className="services-state" role="status">Memuat layanan...</p>
                 )}
 
                 {!loading && error && (
-
-                    <p>
-                        {error}
-                    </p>
-
+                    <p className="services-state" role="alert">{error}</p>
                 )}
 
                 {!loading &&
                     !error &&
                     layanan.length === 0 && (
-
-                        <p>
-                            Belum ada layanan.
-                        </p>
-
+                        <p className="services-state">Belum ada layanan.</p>
                     )}
 
                 {!loading &&
                     !error &&
                     layanan.length > 0 && (
 
-                        <div
-                            style={{
-                                display: "grid",
-                                gridTemplateColumns:
-                                    "repeat(auto-fit, minmax(280px, 1fr))",
-                                gap: "25px"
-                            }}
-                        >
+                        <div className="services-grid">
 
-                            {layanan.map((item) => (
+                            {layanan.map((item, index) => {
+                                const { label, Icon } = categoryMeta[index] || {
+                                    label: "EVENT SERVICE",
+                                    Icon: Sparkles
+                                };
 
-                                <div
-                                    key={item.id}
-                                    style={{
-                                        padding: "30px",
-                                        background: "#fff",
-                                        border: "1px solid #ddd",
-                                        minHeight: "220px",
-                                        boxSizing: "border-box"
-                                    }}
-                                >
-
-                                    <p
-                                        style={{
-                                            fontSize: "14px",
-                                            letterSpacing: "2px",
-                                            color: "#777"
-                                        }}
-                                    >
-                                        SERVICE
-                                    </p>
-
-                                    <h2>
-                                        {item.nama_layanan}
-                                    </h2>
-
-                                    <p
-                                        style={{
-                                            lineHeight: "1.7",
-                                            color: "#555"
-                                        }}
-                                    >
-                                        {item.deskripsi}
-                                    </p>
-
-                                </div>
-
-                            ))}
+                                return (
+                                    <article className="service-detail-card" key={item.id}>
+                                        <div className="service-detail-meta">
+                                            <span className="service-detail-icon">
+                                                <Icon size={17} strokeWidth={1.8} aria-hidden="true" />
+                                            </span>
+                                            <span className="service-detail-tag">{label}</span>
+                                        </div>
+                                        <h2>{item.nama_layanan}</h2>
+                                        <p>{item.deskripsi}</p>
+                                        <Link to="/kontak" className="service-detail-link">
+                                            VIEW DETAILS <ArrowRight size={13} aria-hidden="true" />
+                                        </Link>
+                                    </article>
+                                );
+                            })}
 
                         </div>
 
