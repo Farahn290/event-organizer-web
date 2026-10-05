@@ -69,93 +69,26 @@ function Home() {
             {/* HERO */}
 
             <section className="hero">
-
                 <div className="hero-content">
-
-                    <p className="hero-label">
-                        EVENT ORGANIZER
+                    <p className="hero-kicker">
+                        <span aria-hidden="true" />
+                        PREMIER EVENT ORGANIZER &amp; PRODUCTION
                     </p>
-
                     <h1>
-                        We Create
-                        <br />
-                        Unforgettable
-                        <br />
-                        Moments.
+                        <span>Create Moments.</span>
+                        <span className="hero-highlight">Celebrate Life.</span>
                     </h1>
-
                     <p className="hero-description">
-                        Kami membantu merancang dan mengelola
-                        berbagai acara dengan konsep kreatif,
-                        profesional, dan berkesan.
+                        We turn your dream events into unforgettable experiences. Dari konsep
+                        eksklusif, kurasi visual mewah, hingga eksekusi panggung kelas dunia dengan
+                        presisi sempurna.
                     </p>
-
                     <div className="hero-buttons">
-
-                        <Link
-                            to="/kontak"
-                            className="btn-primary"
-                        >
-                            Konsultasi Sekarang
+                        <Link to="/layanan" className="btn-primary">
+                            Explore Our Services
                         </Link>
-
-                        <Link
-                            to="/layanan"
-                            className="btn-secondary"
-                        >
-                            Lihat Layanan
-                        </Link>
-
                     </div>
-
                 </div>
-
-            </section>
-
-
-            {/* INTRO */}
-
-            <section className="home-intro">
-
-                <div>
-
-                    <p className="section-label">
-                        WHO WE ARE
-                    </p>
-
-                    <h2>
-                        Partner Anda Dalam
-                        <br />
-                        Menciptakan Event
-                        <br />
-                        Yang Berkesan.
-                    </h2>
-
-                </div>
-
-                <div>
-
-                    <p>
-                        Eventora adalah perusahaan event organizer
-                        yang membantu klien mewujudkan berbagai
-                        konsep acara secara profesional.
-                    </p>
-
-                    <p>
-                        Mulai dari perencanaan, konsep, koordinasi,
-                        hingga pelaksanaan acara, kami memastikan
-                        setiap detail berjalan dengan baik.
-                    </p>
-
-                    <Link
-                        to="/tentang"
-                        className="text-link"
-                    >
-                        Tentang Kami →
-                    </Link>
-
-                </div>
-
             </section>
 
 

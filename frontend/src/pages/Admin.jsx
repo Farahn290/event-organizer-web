@@ -604,13 +604,11 @@ function Admin() {
                         ADMIN DASHBOARD
                     </p>
 
-                    <h1
-                        style={{
-                            margin: "5px 0"
-                        }}
-                    >
-                        EVENTORA
-                    </h1>
+                    <img
+                        src="/maqnet-kreasindo.svg"
+                        alt="Maqnet Kreasindo"
+                        className="admin-brand-image"
+                    />
 
                     <span>
                         Selamat datang,{" "}

@@ -14,7 +14,11 @@ function Footer() {
                         to="/"
                         className="footer-logo"
                     >
-                        EVENTORA
+                        <img
+                            src="/maqnet-kreasindo.svg"
+                            alt="Maqnet Kreasindo"
+                            className="footer-logo-image"
+                        />
                     </Link>
 
                     <p>

@@ -90,9 +90,11 @@ function Login() {
                 }}
             >
 
-                <h1>
-                    EVENTORA
-                </h1>
+                <img
+                    src="/maqnet-kreasindo.svg"
+                    alt="Maqnet Kreasindo"
+                    className="auth-brand-image"
+                />
 
                 <p>
                     Admin Login
