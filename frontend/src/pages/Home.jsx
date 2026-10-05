@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { BadgeCheck, ShieldCheck, Sparkles } from "lucide-react";
 import api from "../services/api";
 
 function Home() {
@@ -77,73 +76,19 @@ function Home() {
                     </p>
                     <h1>
                         <span>Create Moments.</span>
-                        <strong>Celebrate Life.</strong>
+                        <span className="hero-highlight">Celebrate Life.</span>
                     </h1>
                     <p className="hero-description">
-                        We turn your dream events into unforgettable experiences. Dari konsep eksklusif,
-                        kurasi visual megah, hingga eksekusi panggung kelas dunia dengan presisi sempurna.
+                        We turn your dream events into unforgettable experiences. Dari konsep
+                        eksklusif, kurasi visual mewah, hingga eksekusi panggung kelas dunia dengan
+                        presisi sempurna.
                     </p>
                     <div className="hero-buttons">
-                        <Link
-                            to="/layanan"
-                            className="btn-primary"
-                        >
-                            EXPLORE OUR SERVICES
-                            <span aria-hidden="true">→</span>
+                        <Link to="/layanan" className="btn-primary">
+                            Explore Our Services
                         </Link>
                     </div>
-                    <div className="hero-trust" aria-label="Komitmen Eventora">
-                        <span><BadgeCheck size={13} aria-hidden="true" /> ISO 9001 CERTIFIED EVENT CREW</span>
-                        <span><Sparkles size={13} aria-hidden="true" /> 5-STAR LUXURY VENUE PARTNERS</span>
-                        <span><ShieldCheck size={13} aria-hidden="true" /> DISCREET VIP PRIVACY PROTOCOL</span>
-                    </div>
                 </div>
-            </section>
-
-
-            {/* INTRO */}
-
-            <section className="home-intro">
-
-                <div>
-
-                    <p className="section-label">
-                        WHO WE ARE
-                    </p>
-
-                    <h2>
-                        Partner Anda Dalam
-                        <br />
-                        Menciptakan Event
-                        <br />
-                        Yang Berkesan.
-                    </h2>
-
-                </div>
-
-                <div>
-
-                    <p>
-                        Eventora adalah perusahaan event organizer
-                        yang membantu klien mewujudkan berbagai
-                        konsep acara secara profesional.
-                    </p>
-
-                    <p>
-                        Mulai dari perencanaan, konsep, koordinasi,
-                        hingga pelaksanaan acara, kami memastikan
-                        setiap detail berjalan dengan baik.
-                    </p>
-
-                    <Link
-                        to="/tentang"
-                        className="text-link"
-                    >
-                        Tentang Kami →
-                    </Link>
-
-                </div>
-
             </section>
 
 

@@ -19,32 +19,43 @@ function Tentang() {
                         <br />
                         <span>Unforgettable</span>
                         <br />
-                        Moments
+                        About MaqnetKreasindo
                     </h1>
 
                     <p className="about-profile-description">
-                        Maqnet is one of the leading event organizer companies in Indonesia, providing complete solutions in branding, marketing, communication, strategy, digital execution, events, and printing for major industry players.
+                       PT Maqnet Kreasindo adalah salah satu perusahaan grup periklanan terkemuka di Indonesia yang memberikan solusi lengkap dalam branding, pemasaran, komunikasi, teknologi, strategi & eksekusi digital, acara dan pencetakan untuk pemain industri besar di Indonesia.   Kami mengutamakan integritas, kerja tim yang kuat, inovasi dalam setiap pekerjaan yang kami lakukan, dan selalu berusaha membangun kepercayaan bagi klien dan audiens
                     </p>
 
                     <p className="about-profile-description">
-                        We prioritize integrity, strong teamwork, and innovation in every project, building trust with our clients and audiences.
+                        .
                     </p>
 
                     <div className="about-profile-values">
                         <article>
                             <span>01</span>
-                            <h2>Visi Kami</h2>
-                            <p>Menjadi mitra event terpercaya dengan pengalaman kreatif dan standar eksekusi tinggi.</p>
+                            <h2>VISI KAMI</h2>
+                            <p>
+                                Menjadi penyedia jasa promosi &amp; publikasi (ATL &amp; BTL)
+                                yang dapat diandalkan dan terpercaya, serta selalu update dalam
+                                pengembangan kreativitas seiring majunya dunia teknologi digital.
+                            </p>
                         </article>
                         <article>
                             <span>02</span>
-                            <h2>Misi Kami</h2>
-                            <p>Menghadirkan konsep, produksi, dan layanan yang menyatukan setiap detail acara.</p>
+                            <h2>MISI KAMI</h2>
+                            <p>
+                                Menjadi wadah atau sarana berinvestasi yang menguntungkan bagi
+                                para pemegang saham hingga klien pengguna jasa, serta berkontribusi
+                                dalam pembangunan dan penciptaan lapangan kerja.
+                            </p>
                         </article>
                         <article>
                             <span>03</span>
-                            <h2>Nilai Kami</h2>
-                            <p>Integritas, kolaborasi, inovasi, dan komitmen pada kualitas.</p>
+                            <h2>NILAI KAMI</h2>
+                            <p>
+                                Integritas, kolaborasi, inovasi, dan komitmen pada kualitas dalam
+                                setiap langkah kerja kami.
+                            </p>
                         </article>
                     </div>
 
@@ -53,23 +64,23 @@ function Tentang() {
                     </Link>
                 </div>
 
-                <div className="about-photo-grid" aria-label="Dokumentasi acara Maqnet Kreasindo">
+                <div className="about-photo-grid" aria-label="Layanan Maqnet Kreasindo">
                     <img
                         className="about-photo-featured"
-                        src="https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=1000&q=85"
-                        alt="Suasana acara perusahaan di ballroom"
+                        src="/tentang-1.jpg"
+                        alt="Out of Home Advertisement"
                     />
                     <img
-                        src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=85"
-                        alt="Dekorasi perayaan elegan"
+                        src="/tentang-2.jpg"
+                        alt="Event Management"
                     />
                     <img
-                        src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=800&q=85"
-                        alt="Produksi konferensi dan panggung"
+                        src="/tentang-3.jpg"
+                        alt="Exhibition Contractor"
                     />
                     <img
-                        src="https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=85"
-                        alt="Jamuan acara di ballroom"
+                        src="/tentang-4.jpg"
+                        alt="One Stop Printing Solution"
                     />
                 </div>
             </section>

@@ -17,40 +17,40 @@ const categoryMeta = [
     { label: "CELEBRATION", Icon: CakeSlice },
     { label: "CORPORATE", Icon: Building2 },
     { label: "MASS SCALE", Icon: PartyPopper },
-    { label: "ACADEMIC", Icon: Presentation },
-    { label: "ULTRA PRIVATE", Icon: Wine }
+    { label: "ACADEMIC", Icon: Presentation }
 ];
+
+const moreServiceCard = {
+    id: "sample-more",
+    nama_layanan: "GOOVERMENT & PUBLIC EVENT",
+    deskripsi: "penyelenggaraan acara kenegaraan dan festival publik yang aman, tertib, dan berdampak luas. Dilengkapi manajemen kerumunan (crowd control), koordinasi lintas instansi, serta tata protokoler resmi."
+};
 
 const sampleServices = [
     {
         id: "sample-wedding",
-        nama_layanan: "Wedding Organizer",
-        deskripsi: "Pernikahan impian dengan konsep elegan, intimate garden soiree maupun grand ballroom mewah. Koordinasi vendor menyeluruh, tata busana, hingga souvenir VIP."
+        nama_layanan: "CORPORATE EVENT",
+        deskripsi: "Solusi acara bisnis eksklusif untuk peluncuran produk, corporate gathering, maupun awarding night berkelas. Pengelolaan end-to-end mencakup konsep tematik, stage design, pengisi acara ternama, hingga cinderamata VIP."
     },
     {
         id: "sample-birthday",
-        nama_layanan: "Birthday Party",
-        deskripsi: "Pesta ulang tahun yang seru, tematik, dan penuh momen berkesan. Dari sweet seventeen gemerlap, 21st golden milestone, hingga jubilee private dinner."
+        nama_layanan: "MICE EVENT",
+        deskripsi: "Layanan komprehensif penyelenggaraan konferensi, seminar korporat, pameran akbar, hingga program insentif perjalanan. Didukung teknologi mutakhir, koordinasi logistik terpadu, dan manajemen peserta profesional."
     },
     {
         id: "sample-corporate",
-        nama_layanan: "Corporate Event",
-        deskripsi: "Acara perusahaan prestisius, product launch megah, annual meeting, awarding night, hingga company gathering dengan reputasi brand yang terjaga sempurna."
+        nama_layanan: "BRAND ACTIVATION",
+        deskripsi: "Menghidupkan identitas brand Anda melalui kampanye kreatif, peluncuran produk tematik, dan aksi langsung yang memikat. Dirancang untuk menciptakan impresi kuat, interaksi organik, serta eksposur maksimal."
     },
     {
         id: "sample-concert",
-        nama_layanan: "Concert & Festival",
-        deskripsi: "Konser musik akbar dan festival meriah dengan sound-lighting berstandar internasional, rigging panggung kokoh, manajemen ticketing terintegrasi, dan keamanan ketat."
+        nama_layanan: "CEREMONIAL EVENTS",
+        deskripsi: "Solusi profesional untuk perhelatan seremonial resmi berstandar tinggi. Menangani grand opening, awarding resmi, dan momen perayaan penting dengan tata visual canggih, alur protokoler rapi, serta koordinasi tanpa cela."
     },
     {
         id: "sample-seminar",
-        nama_layanan: "Seminar & Workshop",
-        deskripsi: "Pengelolaan seminar, international conference, dan symposium profesional berskala nasional. Dilengkapi live streaming hybrid multiroom dan registrasi digital."
-    },
-    {
-        id: "sample-private",
-        nama_layanan: "Private Event",
-        deskripsi: "Acara privat eksklusif, VIP anniversary dinner, private yacht party, dan perayaan keluarga yang sarat keintiman serta privasi tanpa batas."
+        nama_layanan: "SEMINAR WORKSHOP",
+        deskripsi: "Sukseskan program pelatihan dan lokakarya Anda tanpa repot. Kami menangani manajemen pendaftaran peserta, penyediaan kit seminar eksklusif, tata ruang kelas ergonomis, hingga teknologi live feedback interaktif."
     }
 ];
 
@@ -77,11 +77,11 @@ function Layanan() {
 
                 if (response.data.success) {
 
-                    setLayanan(
-                        response.data.data.length > 0
-                            ? response.data.data
-                            : sampleServices
-                    );
+                    const services = response.data.data.length > 0
+                        ? response.data.data
+                        : sampleServices;
+
+                    setLayanan(services.slice(0, 5));
 
                 } else {
 
@@ -170,6 +170,20 @@ function Layanan() {
                                     </article>
                                 );
                             })}
+
+                            <article className="service-detail-card service-detail-card-more" key={moreServiceCard.id}>
+                                <div className="service-detail-meta">
+                                    <span className="service-detail-icon">
+                                        <Sparkles size={17} strokeWidth={1.8} aria-hidden="true" />
+                                    </span>
+                                    <span className="service-detail-tag">MORE</span>
+                                </div>
+                                <h2>{moreServiceCard.nama_layanan}</h2>
+                                <p>{moreServiceCard.deskripsi}</p>
+                                <Link to="/kontak" className="service-detail-link">
+                                    VIEW DETAILS <ArrowRight size={13} aria-hidden="true" />
+                                </Link>
+                            </article>
 
                         </div>
 
