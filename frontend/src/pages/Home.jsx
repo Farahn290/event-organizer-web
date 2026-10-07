@@ -1,14 +1,77 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Award, PartyPopper, Smile, Users } from "lucide-react";
 import api from "../services/api";
+import homeHeroImage1 from "../assets/home-hero-1.png";
+import homeHeroImage2 from "../assets/home-hero-2.png";
+import homeHeroImage3 from "../assets/home-hero-3.png";
+import homeHeroImage4 from "../assets/home-hero-4.png";
+import homeHeroImage5 from "../assets/home-hero-5.png";
+
+const heroImages = [
+    homeHeroImage1,
+    homeHeroImage2,
+    homeHeroImage3,
+    homeHeroImage4,
+    homeHeroImage5
+];
+
+const homeStats = [
+    {
+        value: "150+",
+        label: "Events Completed",
+        description: "From intimate galas to arenas",
+        Icon: PartyPopper
+    },
+    {
+        value: "100+",
+        label: "Happy Clients",
+        description: "High-profile brands & families",
+        Icon: Smile
+    },
+    {
+        value: "10+",
+        label: "Years Experience",
+        description: "Industry standards of excellence",
+        Icon: Award
+    },
+    {
+        value: "50+",
+        label: "Professional Team",
+        description: "Directors, stage crew & designers",
+        Icon: Users
+    }
+];
 
 function Home() {
 
     const [layanan, setLayanan] = useState([]);
     const [events, setEvents] = useState([]);
     const [galeri, setGaleri] = useState([]);
+    const [activeHeroImage, setActiveHeroImage] = useState(0);
+    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
 
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+        const updateMotionPreference = () => setPrefersReducedMotion(motionPreference.matches);
+
+        updateMotionPreference();
+        motionPreference.addEventListener("change", updateMotionPreference);
+
+        return () => motionPreference.removeEventListener("change", updateMotionPreference);
+    }, []);
+
+    useEffect(() => {
+        if (prefersReducedMotion) return undefined;
+
+        const intervalId = window.setInterval(() => {
+            setActiveHeroImage((currentImage) => (currentImage + 1) % heroImages.length);
+        }, 5000);
+
+        return () => window.clearInterval(intervalId);
+    }, [prefersReducedMotion]);
 
     useEffect(() => {
 
@@ -69,6 +132,16 @@ function Home() {
             {/* HERO */}
 
             <section className="hero">
+                <div className="hero-slideshow" aria-hidden="true">
+                    {heroImages.map((image, index) => (
+                        <img
+                            className={`hero-slide${index === activeHeroImage ? " is-active" : ""}`}
+                            src={image}
+                            alt=""
+                            key={image}
+                        />
+                    ))}
+                </div>
                 <div className="hero-content">
                     <p className="hero-kicker">
                         <span aria-hidden="true" />
@@ -88,6 +161,21 @@ function Home() {
                             Explore Our Services
                         </Link>
                     </div>
+                </div>
+            </section>
+
+            <section className="home-stats" aria-label="Maqnet Kreasindo in numbers">
+                <div className="home-stats-grid">
+                    {homeStats.map(({ value, label, description, Icon }) => (
+                        <article className="home-stat-card" key={label}>
+                            <span className="home-stat-icon">
+                                <Icon size={15} strokeWidth={1.8} aria-hidden="true" />
+                            </span>
+                            <strong>{value}</strong>
+                            <h3>{label}</h3>
+                            <p>{description}</p>
+                        </article>
+                    ))}
                 </div>
             </section>
 
