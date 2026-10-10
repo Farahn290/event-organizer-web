@@ -15,7 +15,7 @@ function Footer() {
                         className="footer-logo"
                     >
                         <img
-                            src="/maqnet-kreasindo.svg"
+                            src="/maqnet-kreasindo-logo.png"
                             alt="Maqnet Kreasindo"
                             className="footer-logo-image"
                         />

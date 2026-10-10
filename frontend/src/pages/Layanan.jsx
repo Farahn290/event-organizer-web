@@ -135,11 +135,11 @@ function Layanan() {
 
     return (
 
-        <div className="page">
+        <div className="page services-page">
 
             <section className="services-intro">
                 <p>WHAT WE SPECIALIZE IN</p>
-                <h1>Our Specialized Services</h1>
+                <h1>Our Specialized <span className="services-title-highlight">Services</span></h1>
                 <span>
                     Solusi komprehensif untuk setiap jenis perayaan dan acara penting Anda,
                     dirancang dengan dedikasi artistik dan eksekusi teknis tingkat tinggi.

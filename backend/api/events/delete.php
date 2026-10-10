@@ -44,6 +44,17 @@ if (!$id) {
 
 try {
 
+    $pdo->beginTransaction();
+
+    $detachPhotos = $pdo->prepare(
+        "UPDATE galeri
+         SET event_id = NULL
+         WHERE event_id = :id"
+    );
+    $detachPhotos->execute([
+        ":id" => $id
+    ]);
+
     $query = $pdo->prepare(
         "DELETE FROM events
          WHERE id = :id"
@@ -53,12 +64,18 @@ try {
         ":id" => $id
     ]);
 
+    $pdo->commit();
+
     echo json_encode([
         "success" => true,
         "message" => "Event berhasil dihapus"
     ]);
 
 } catch (PDOException $e) {
+
+    if ($pdo->inTransaction()) {
+        $pdo->rollBack();
+    }
 
     http_response_code(500);
 

@@ -65,7 +65,7 @@ function Galeri() {
 
     return (
 
-        <div className="page">
+        <div className="page gallery-page">
 
             <section className="page-header">
 

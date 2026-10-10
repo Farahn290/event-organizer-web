@@ -4,8 +4,8 @@ import { Award, PartyPopper, Smile, Users } from "lucide-react";
 import api from "../services/api";
 import homeHeroImage1 from "../assets/home-hero-1.png";
 import homeHeroImage2 from "../assets/home-hero-2.png";
-import homeHeroImage3 from "../assets/home-hero-3.png";
-import homeHeroImage4 from "../assets/home-hero-4.png";
+import homeHeroImage3 from "../assets/home-hero-3-festival.png";
+import homeHeroImage4 from "../assets/home-hero-4-ifg.png";
 import homeHeroImage5 from "../assets/home-hero-5.png";
 
 const heroImages = [
@@ -113,7 +113,6 @@ function Home() {
                     "Home Error:",
                     error
                 );
-
             } finally {
 
                 setLoading(false);
@@ -182,7 +181,7 @@ function Home() {
 
             {/* SERVICES */}
 
-            <section className="home-section">
+            <section className="home-section home-services">
 
                 <div className="section-heading">
 
@@ -193,7 +192,7 @@ function Home() {
                         </p>
 
                         <h2>
-                            Layanan Kami
+                            Layanan <span className="home-services-title-accent">Kami</span>
                         </h2>
 
                     </div>
@@ -268,7 +267,7 @@ function Home() {
                         </p>
 
                         <h2>
-                            Event Terbaru
+                            Event <span className="home-section-title-accent">Terbaru</span>
                         </h2>
 
                     </div>
@@ -343,7 +342,7 @@ function Home() {
 
             {/* GALLERY */}
 
-            <section className="home-section">
+            <section className="home-section home-gallery">
 
                 <div className="section-heading">
 
@@ -354,7 +353,7 @@ function Home() {
                         </p>
 
                         <h2>
-                            Dokumentasi Event
+                            Dokumentasi <span className="home-section-title-accent">Event</span>
                         </h2>
 
                     </div>
@@ -411,6 +410,8 @@ function Home() {
             {/* CTA */}
 
             <section className="home-cta">
+
+                <div className="home-cta-background" aria-hidden="true" />
 
                 <div>
 
