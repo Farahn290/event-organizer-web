@@ -38,8 +38,9 @@ function Admin() {
     const [galeri, setGaleri] = useState([]);
 
     const [judulGaleri, setJudulGaleri] = useState("");
-    const [gambarGaleri, setGambarGaleri] = useState(null);
+    const [gambarGaleri, setGambarGaleri] = useState([]);
     const [deskripsiGaleri, setDeskripsiGaleri] = useState("");
+    const [eventIdGaleri, setEventIdGaleri] = useState("");
 
     const [editingGaleriId, setEditingGaleriId] = useState(null);
     const [gambarLama, setGambarLama] = useState("");
@@ -380,35 +381,25 @@ function Admin() {
 
         e.preventDefault();
 
+        let uploadedCount = 0;
+
         try {
 
-            const formData = new FormData();
-
-            formData.append(
-                "judul",
-                judulGaleri
-            );
-
-            formData.append(
-                "deskripsi",
-                deskripsiGaleri
-            );
-
-            if (gambarGaleri) {
-
-                formData.append(
-                    "gambar",
-                    gambarGaleri
-                );
-
-            }
-
             if (editingGaleriId) {
+                const formData = new FormData();
 
                 formData.append(
-                    "id",
-                    editingGaleriId
+                    "judul",
+                    judulGaleri
                 );
+
+                formData.append("deskripsi", deskripsiGaleri);
+                formData.append("event_id", eventIdGaleri);
+                formData.append("id", editingGaleriId);
+
+                if (gambarGaleri[0]) {
+                    formData.append("gambar", gambarGaleri[0]);
+                }
 
                 await api.post(
                     "/galeri/update.php",
@@ -416,17 +407,26 @@ function Admin() {
                 );
 
             } else {
+                if (gambarGaleri.length === 0) {
+                    alert("Pilih minimal satu foto untuk galeri.");
+                    return;
+                }
 
-                await api.post(
-                    "/galeri/create.php",
-                    formData
-                );
+                for (const gambar of gambarGaleri) {
+                    const formData = new FormData();
+                    formData.append("judul", judulGaleri || gambar.name);
+                    formData.append("deskripsi", deskripsiGaleri);
+                    formData.append("event_id", eventIdGaleri);
+                    formData.append("gambar", gambar);
 
+                    await api.post("/galeri/create.php", formData);
+                    uploadedCount += 1;
+                }
             }
 
             resetGaleriForm();
 
-            getGaleri();
+            await getGaleri();
 
         } catch (error) {
 
@@ -435,10 +435,15 @@ function Admin() {
                 error
             );
 
-            alert(
-                error.response?.data?.message ||
-                "Gagal menyimpan galeri"
-            );
+            const errorMessage = error.response?.data?.message ||
+                "Gagal menyimpan galeri";
+            if (uploadedCount > 0) {
+                resetGaleriForm();
+                alert(`${uploadedCount} foto berhasil diunggah sebelum terjadi kesalahan. Pilih kembali foto yang belum terunggah. ${errorMessage}`);
+            } else {
+                alert(errorMessage);
+            }
+            await getGaleri();
 
         }
 
@@ -451,8 +456,9 @@ function Admin() {
     const resetGaleriForm = () => {
 
         setJudulGaleri("");
-        setGambarGaleri(null);
+        setGambarGaleri([]);
         setDeskripsiGaleri("");
+        setEventIdGaleri("");
         setEditingGaleriId(null);
         setGambarLama("");
 
@@ -483,11 +489,15 @@ function Admin() {
             item.deskripsi || ""
         );
 
+        setEventIdGaleri(
+            item.event_id ? String(item.event_id) : ""
+        );
+
         setGambarLama(
             item.gambar || ""
         );
 
-        setGambarGaleri(null);
+        setGambarGaleri([]);
 
         window.scrollTo({
             top: document.body.scrollHeight,
@@ -1017,16 +1027,35 @@ function Admin() {
                     }}
                 >
 
+                    <select
+                        value={eventIdGaleri}
+                        onChange={(e) => setEventIdGaleri(e.target.value)}
+                        style={{
+                            padding: "12px"
+                        }}
+                    >
+                        <option value="">Galeri umum (tidak terkait event)</option>
+                        {events.map((event) => (
+                            <option key={event.id} value={event.id}>
+                                Foto untuk: {event.nama_event}
+                            </option>
+                        ))}
+                    </select>
+
+                    <p style={{ margin: "-8px 0 0", color: "#666", fontSize: "14px" }}>
+                        Pilih event, lalu unggah hingga 8 foto sekaligus agar tampil saat kartu event dibuka.
+                    </p>
+
                     <input
                         type="text"
-                        placeholder="Judul galeri"
+                        placeholder="Judul galeri (opsional)"
                         value={judulGaleri}
+                        required={Boolean(editingGaleriId)}
                         onChange={(e) =>
                             setJudulGaleri(
                                 e.target.value
                             )
                         }
-                        required
                         style={{
                             padding: "12px"
                         }}
@@ -1035,16 +1064,28 @@ function Admin() {
                     <input
                         id="gambarGaleri"
                         type="file"
+                        multiple={!editingGaleriId}
                         accept="image/jpeg,image/png,image/webp"
-                        onChange={(e) =>
-                            setGambarGaleri(
-                                e.target.files[0]
-                            )
-                        }
+                        onChange={(e) => {
+                            const selectedFiles = Array.from(e.target.files || []);
+                            if (selectedFiles.length > 8) {
+                                alert("Maksimal 8 foto dapat dipilih sekaligus.");
+                                e.target.value = "";
+                                setGambarGaleri([]);
+                                return;
+                            }
+                            setGambarGaleri(selectedFiles);
+                        }}
                         style={{
                             padding: "10px"
                         }}
                     />
+
+                    {!editingGaleriId && gambarGaleri.length > 0 && (
+                        <p style={{ margin: "-8px 0 0", color: "#666", fontSize: "14px" }}>
+                            {gambarGaleri.length} foto dipilih
+                        </p>
+                    )}
 
                     {editingGaleriId &&
                         gambarLama && (
@@ -1168,6 +1209,12 @@ function Admin() {
                                 <h3>
                                     {item.judul}
                                 </h3>
+
+                                {item.event_id && (
+                                    <p>
+                                        Event: {events.find((event) => String(event.id) === String(item.event_id))?.nama_event || "Event terkait"}
+                                    </p>
+                                )}
 
                                 <p>
                                     {item.deskripsi}

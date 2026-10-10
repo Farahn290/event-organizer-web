@@ -33,6 +33,24 @@ try {
 
     $data = $query->fetchAll(PDO::FETCH_ASSOC);
 
+    $photoQuery = $pdo->query(
+        "SELECT id, event_id, judul, gambar, deskripsi
+         FROM galeri
+         WHERE event_id IS NOT NULL
+         ORDER BY id ASC"
+    );
+
+    $photosByEvent = [];
+
+    foreach ($photoQuery->fetchAll(PDO::FETCH_ASSOC) as $photo) {
+        $photosByEvent[(string) $photo["event_id"]][] = $photo;
+    }
+
+    foreach ($data as &$event) {
+        $event["galeri"] = $photosByEvent[(string) $event["id"]] ?? [];
+    }
+    unset($event);
+
     echo json_encode([
         "success" => true,
         "data" => $data

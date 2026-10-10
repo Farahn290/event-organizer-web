@@ -18,7 +18,7 @@ function Navbar() {
                     onClick={closeMenu}
                 >
                     <img
-                        src="/maqnet-kreasindo.svg"
+                        src="/maqnet-kreasindo-logo.png"
                         alt="Maqnet Kreasindo"
                         className="navbar-brand-image"
                     />

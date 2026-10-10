@@ -26,6 +26,9 @@ header("Content-Type: application/json");
 
 $judul = trim($_POST["judul"] ?? "");
 $deskripsi = trim($_POST["deskripsi"] ?? "");
+$eventId = isset($_POST["event_id"]) && $_POST["event_id"] !== ""
+    ? intval($_POST["event_id"])
+    : null;
 
 if ($judul === "") {
 
@@ -34,6 +37,18 @@ if ($judul === "") {
     echo json_encode([
         "success" => false,
         "message" => "Judul galeri wajib diisi"
+    ]);
+
+    exit;
+}
+
+if ($eventId !== null && $eventId <= 0) {
+
+    http_response_code(400);
+
+    echo json_encode([
+        "success" => false,
+        "message" => "Event yang dipilih tidak valid"
     ]);
 
     exit;
@@ -117,31 +132,43 @@ if (!is_dir($uploadDir)) {
 
 $filePath = $uploadDir . $fileName;
 
-if (!move_uploaded_file($file["tmp_name"], $filePath)) {
-
-    http_response_code(500);
-
-    echo json_encode([
-        "success" => false,
-        "message" => "Gagal menyimpan gambar"
-    ]);
-
-    exit;
-}
-
 try {
+
+    if ($eventId !== null) {
+        $eventQuery = $pdo->prepare("SELECT id FROM events WHERE id = :id");
+        $eventQuery->execute([":id" => $eventId]);
+
+        if (!$eventQuery->fetchColumn()) {
+            http_response_code(400);
+            echo json_encode([
+                "success" => false,
+                "message" => "Event yang dipilih tidak ditemukan"
+            ]);
+            exit;
+        }
+    }
+
+    if (!move_uploaded_file($file["tmp_name"], $filePath)) {
+        http_response_code(500);
+        echo json_encode([
+            "success" => false,
+            "message" => "Gagal menyimpan gambar"
+        ]);
+        exit;
+    }
 
     $query = $pdo->prepare(
         "INSERT INTO galeri
-        (judul, gambar, deskripsi)
+        (judul, gambar, deskripsi, event_id)
         VALUES
-        (:judul, :gambar, :deskripsi)"
+        (:judul, :gambar, :deskripsi, :event_id)"
     );
 
     $query->execute([
         ":judul" => $judul,
         ":gambar" => $fileName,
-        ":deskripsi" => $deskripsi
+        ":deskripsi" => $deskripsi,
+        ":event_id" => $eventId
     ]);
 
     echo json_encode([

@@ -27,8 +27,11 @@ header("Content-Type: application/json");
 $id = intval($_POST["id"] ?? 0);
 $judul = trim($_POST["judul"] ?? "");
 $deskripsi = trim($_POST["deskripsi"] ?? "");
+$eventId = isset($_POST["event_id"]) && $_POST["event_id"] !== ""
+    ? intval($_POST["event_id"])
+    : null;
 
-if ($id <= 0 || $judul === "") {
+if ($id <= 0 || $judul === "" || ($eventId !== null && $eventId <= 0)) {
 
     http_response_code(400);
 
@@ -41,6 +44,20 @@ if ($id <= 0 || $judul === "") {
 }
 
 try {
+
+    if ($eventId !== null) {
+        $eventQuery = $pdo->prepare("SELECT id FROM events WHERE id = :id");
+        $eventQuery->execute([":id" => $eventId]);
+
+        if (!$eventQuery->fetchColumn()) {
+            http_response_code(400);
+            echo json_encode([
+                "success" => false,
+                "message" => "Event yang dipilih tidak ditemukan"
+            ]);
+            exit;
+        }
+    }
 
     $query = $pdo->prepare(
         "SELECT gambar
@@ -154,7 +171,8 @@ try {
         "UPDATE galeri
          SET judul = :judul,
              gambar = :gambar,
-             deskripsi = :deskripsi
+             deskripsi = :deskripsi,
+             event_id = :event_id
          WHERE id = :id"
     );
 
@@ -162,6 +180,7 @@ try {
         ":judul" => $judul,
         ":gambar" => $newFileName,
         ":deskripsi" => $deskripsi,
+        ":event_id" => $eventId,
         ":id" => $id
     ]);
 
