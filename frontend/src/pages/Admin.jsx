@@ -615,7 +615,7 @@ function Admin() {
                     </p>
 
                     <img
-                        src="/maqnet-kreasindo.svg"
+                        src="/maqnet-kreasindo-logo.png"
                         alt="Maqnet Kreasindo"
                         className="admin-brand-image"
                     />
