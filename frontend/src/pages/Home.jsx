@@ -9,11 +9,19 @@ import homeHeroImage4 from "../assets/home-hero-4-ifg.png";
 import homeHeroImage5 from "../assets/home-hero-5.png";
 
 const heroImages = [
-    homeHeroImage1,
     homeHeroImage2,
+    homeHeroImage1,
     homeHeroImage3,
     homeHeroImage4,
     homeHeroImage5
+];
+
+const featuredClients = Array.from({ length: 24 }, (_, index) =>
+    `/client-logos-mono/logo-${String(index + 1).padStart(2, "0")}.png`
+);
+const featuredClientRows = [
+    featuredClients.slice(0, 12),
+    featuredClients.slice(12)
 ];
 
 const homeStats = [
@@ -151,37 +159,43 @@ function Home() {
                         <span className="hero-highlight">Celebrate Life.</span>
                     </h1>
                     <p className="hero-description">
-                        We turn your dream events into unforgettable experiences. Dari konsep
-                        eksklusif, kurasi visual mewah, hingga eksekusi panggung kelas dunia dengan
-                        presisi sempurna.
+                        Kami mengubah acara impian Anda menjadi pengalaman tak terlupakan. Dari
+                        konsep eksklusif, kurasi visual mewah, hingga eksekusi panggung kelas dunia
+                        dengan presisi sempurna.
                     </p>
                     <div className="hero-buttons">
                         <Link to="/layanan" className="btn-primary">
-                            Explore Our Services
+                            Explore Our Services <span aria-hidden="true">↗</span>
                         </Link>
+                        <Link to="/kontak" className="btn-secondary">
+                            Hubungi Kami
+                        </Link>
+                    </div>
+                </div>
+                <div className="home-stats" aria-label="Maqnet Kreasindo in numbers">
+                    <div className="home-stats-grid">
+                        {homeStats.map(({ value, label, description, Icon }) => (
+                            <article className="home-stat-card" key={label}>
+                                <span className="home-stat-icon">
+                                    <Icon size={19} strokeWidth={1.7} aria-hidden="true" />
+                                </span>
+                                <div className="home-stat-content">
+                                    <strong>{value}</strong>
+                                    <h3>{label}</h3>
+                                    <p>{description}</p>
+                                </div>
+                            </article>
+                        ))}
                     </div>
                 </div>
             </section>
 
-            <section className="home-stats" aria-label="Maqnet Kreasindo in numbers">
-                <div className="home-stats-grid">
-                    {homeStats.map(({ value, label, description, Icon }) => (
-                        <article className="home-stat-card" key={label}>
-                            <span className="home-stat-icon">
-                                <Icon size={15} strokeWidth={1.8} aria-hidden="true" />
-                            </span>
-                            <strong>{value}</strong>
-                            <h3>{label}</h3>
-                            <p>{description}</p>
-                        </article>
-                    ))}
-                </div>
-            </section>
 
+            <div className="home-feature-grid">
 
-            {/* SERVICES */}
+                {/* SERVICES */}
 
-            <section className="home-section home-services">
+                <section className="home-section home-services">
 
                 <div className="section-heading">
 
@@ -194,6 +208,10 @@ function Home() {
                         <h2>
                             Layanan <span className="home-services-title-accent">Kami</span>
                         </h2>
+                        <p className="home-services-description">
+                            Solusi komprehensif dari perencanaan kreatif, kontraktor pameran,
+                            hingga eksekusi teknis berstandar tinggi.
+                        </p>
 
                     </div>
 
@@ -251,12 +269,12 @@ function Home() {
 
                 )}
 
-            </section>
+                </section>
 
 
-            {/* EVENTS */}
+                {/* EVENTS */}
 
-            <section className="home-section home-events">
+                <section className="home-section home-events">
 
                 <div className="section-heading">
 
@@ -269,6 +287,10 @@ function Home() {
                         <h2>
                             Event <span className="home-section-title-accent">Terbaru</span>
                         </h2>
+                        <p className="home-section-description">
+                            Momen dan produksi acara terbaru yang kami wujudkan dengan
+                            perencanaan matang dan eksekusi profesional.
+                        </p>
 
                     </div>
 
@@ -337,24 +359,28 @@ function Home() {
 
                 )}
 
-            </section>
+                </section>
 
 
-            {/* GALLERY */}
+                {/* GALLERY */}
 
-            <section className="home-section home-gallery">
+                <section className="home-section home-gallery">
 
                 <div className="section-heading">
 
                     <div>
 
                         <p className="section-label">
-                            OUR WORK
+                            OUR GALLERY
                         </p>
 
                         <h2>
                             Dokumentasi <span className="home-section-title-accent">Event</span>
                         </h2>
+                        <p className="home-section-description">
+                            Kumpulan arsip momen-momen berharga dan pengalaman luar biasa dari
+                            berbagai event yang telah kami sukseskan.
+                        </p>
 
                     </div>
 
@@ -404,6 +430,39 @@ function Home() {
 
                 )}
 
+                </section>
+
+            </div>
+
+            <section className="home-featured-clients" aria-label="Pelanggan unggulan">
+                <div className="hero-clients">
+                    <p className="hero-clients-label">Pelanggan Unggulan</p>
+                    <div className="hero-clients-window">
+                        <div className="hero-clients-rows">
+                            {featuredClientRows.map((row, rowIndex) => (
+                                <div
+                                    className={`hero-clients-track${rowIndex === 1 ? " hero-clients-track--reverse" : ""}`}
+                                    key={`client-row-${rowIndex}`}
+                                >
+                                    <div className="hero-clients-group">
+                                        {row.map((logo, index) => (
+                                            <span className="hero-client-logo" key={logo}>
+                                                <img src={logo} alt={`Logo pelanggan ${rowIndex * 12 + index + 1}`} />
+                                            </span>
+                                        ))}
+                                    </div>
+                                    <div className="hero-clients-group" aria-hidden="true">
+                                        {row.map((logo) => (
+                                            <span className="hero-client-logo" key={logo}>
+                                                <img src={logo} alt="" />
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </section>
 
 

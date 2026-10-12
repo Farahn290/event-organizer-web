@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useMemo } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Images, MapPin, Star, X } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Images, MapPin, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 
@@ -265,8 +265,12 @@ function Event() {
             <section className="event-archive">
                 <header className="event-archive-header">
                     <div className="event-archive-title">
-                        <Star size={16} fill="currentColor" aria-hidden="true" />
-                        <h1>Our Recent Masterpieces</h1>
+                        <span className="event-archive-eyebrow">EVENT TERBARU</span>
+                        <h1>Our Recent <span>Masterpieces</span></h1>
+                        <p>
+                            Jelajahi berbagai proyek, pameran, dan aktivasi brand yang telah kami
+                            sukseskan dengan standar tertinggi.
+                        </p>
                     </div>
 
                     <div className="event-filters" role="group" aria-label="Filter kategori event">

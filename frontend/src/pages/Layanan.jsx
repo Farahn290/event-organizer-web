@@ -7,22 +7,14 @@ import brandActivationImage from "../assets/brand-activation.png";
 import ceremonialEventImage from "../assets/ceremonial-event.png";
 import musicEventImage from "../assets/music-event.png";
 import publicEventImage from "../assets/public-event.png";
-import {
-    ArrowRight,
-    Building2,
-    CakeSlice,
-    Heart,
-    PartyPopper,
-    Presentation,
-    Sparkles
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const categoryMeta = [
-    { label: "BESPOKE", Icon: Heart },
-    { label: "CELEBRATION", Icon: CakeSlice },
-    { label: "CORPORATE", Icon: Building2 },
-    { label: "MASS SCALE", Icon: PartyPopper },
-    { label: "ACADEMIC", Icon: Presentation }
+    { label: "BESPOKE" },
+    { label: "PROFESSIONAL" },
+    { label: "CREATIVE" },
+    { label: "CEREMONIAL" },
+    { label: "LIVE MUSIC" }
 ];
 
 const serviceEventImages = [
@@ -43,7 +35,7 @@ const serviceImage = (item, index) => {
 
 const moreServiceCard = {
     id: "sample-more",
-    nama_layanan: "GOOVERMENT & PUBLIC EVENT",
+    nama_layanan: "GOVERNMENT & PUBLIC EVENT",
     deskripsi: "penyelenggaraan acara kenegaraan dan festival publik yang aman, tertib, dan berdampak luas. Dilengkapi manajemen kerumunan (crowd control), koordinasi lintas instansi, serta tata protokoler resmi."
 };
 
@@ -138,8 +130,8 @@ function Layanan() {
         <div className="page services-page">
 
             <section className="services-intro">
-                <p>WHAT WE SPECIALIZE IN</p>
-                <h1>Our Specialized <span className="services-title-highlight">Services</span></h1>
+                <p>LAYANAN KAMI</p>
+                <h1>Solusi Terpadu untuk Setiap Kebutuhan Acara &amp; Produksi</h1>
                 <span>
                     Solusi komprehensif untuk setiap jenis perayaan dan acara penting Anda,
                     dirancang dengan dedikasi artistik dan eksekusi teknis tingkat tinggi.
@@ -169,10 +161,7 @@ function Layanan() {
                         <div className="services-grid">
 
                             {layanan.map((item, index) => {
-                                const { label, Icon } = categoryMeta[index] || {
-                                    label: "EVENT SERVICE",
-                                    Icon: Sparkles
-                                };
+                                const { label } = categoryMeta[index] || { label: "EVENT SERVICE" };
                                 const isCorporateEvent =
                                     item.nama_layanan.trim().toLowerCase() === "corporate event";
                                 const isMiceEvent =
@@ -202,11 +191,6 @@ function Layanan() {
                                                 alt={`Dokumentasi ${item.nama_layanan}`}
                                                 loading="lazy"
                                             />
-                                        </div>
-                                        <div className="service-detail-meta">
-                                            <span className="service-detail-icon">
-                                                <Icon size={17} strokeWidth={1.8} aria-hidden="true" />
-                                            </span>
                                             <span className="service-detail-tag">{label}</span>
                                         </div>
                                         <h2>{item.nama_layanan}</h2>
@@ -225,12 +209,7 @@ function Layanan() {
                                         alt={`Dokumentasi ${moreServiceCard.nama_layanan}`}
                                         loading="lazy"
                                     />
-                                </div>
-                                <div className="service-detail-meta">
-                                    <span className="service-detail-icon">
-                                        <Sparkles size={17} strokeWidth={1.8} aria-hidden="true" />
-                                    </span>
-                                    <span className="service-detail-tag">MORE</span>
+                                    <span className="service-detail-tag">PUBLIC EVENT</span>
                                 </div>
                                 <h2>{moreServiceCard.nama_layanan}</h2>
                                 <p>{moreServiceCard.deskripsi}</p>

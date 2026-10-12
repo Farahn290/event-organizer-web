@@ -22,39 +22,6 @@ function Tentang() {
                         We prioritize integrity, strong teamwork, innovation in every work we do, and always strive to build trust for clients and audiences.
                     </p>
 
-                    <div className="about-profile-values">
-                        <article>
-                            <span className="about-card-number">01</span>
-                            <h2>Visi Kami</h2>
-                            <p>
-                                Menjadi penyedia jasa promosi &amp; publikasi (ATL &amp; BTL)
-                                yang dapat diandalkan dan terpercaya.
-                            </p>
-                            <p>
-                                Selalu mengikuti perkembangan kreativitas dan teknologi digital.
-                            </p>
-                        </article>
-                        <article>
-                            <span className="about-card-number">02</span>
-                            <h2>Misi Kami</h2>
-                            <p>
-                                Menciptakan solusi kreatif untuk kebutuhan promosi, event, dan
-                                pencetakan bagi klien.
-                            </p>
-                            <p>
-                                Berkontribusi dalam pembangunan dan penciptaan lapangan kerja.
-                            </p>
-                        </article>
-                        <article>
-                            <span className="about-card-number">03</span>
-                            <h2>Nilai Kami</h2>
-                            <p>
-                                Integritas, kolaborasi, inovasi, dan komitmen pada kualitas
-                                dalam setiap langkah kerja.
-                            </p>
-                        </article>
-                    </div>
-
                     <Link to="/layanan" className="about-profile-link">
                         Learn More About Our Magnet Kreasindo <ArrowRight size={14} aria-hidden="true" />
                     </Link>
@@ -62,11 +29,8 @@ function Tentang() {
 
                 <div className="about-visual-column">
                     <div className="about-photo-grid" aria-label="Layanan Maqnet Kreasindo">
-                        <div className="about-photo-card photo-square">
+                        <div className="about-photo-card about-photo-feature">
                             <img src="/exhibition-contractor.png" alt="Booth pameran Pertamina Digital" />
-                        </div>
-                        <div className="about-photo-card photo-square">
-                            <img src="/pertamina-digital-display.png" alt="Display aplikasi MyPertamina" />
                         </div>
                     </div>
 
@@ -84,6 +48,39 @@ function Tentang() {
                             <span>One Stop Printing Solution</span>
                         </div>
                     </div>
+                </div>
+
+                <div className="about-profile-values">
+                    <article>
+                        <span className="about-card-number">01</span>
+                        <h2>Visi Kami</h2>
+                        <p>
+                            Menjadi penyedia jasa promosi &amp; publikasi (ATL &amp; BTL)
+                            yang dapat diandalkan dan terpercaya.
+                        </p>
+                        <p>
+                            Selalu mengikuti perkembangan kreativitas dan teknologi digital.
+                        </p>
+                    </article>
+                    <article>
+                        <span className="about-card-number">02</span>
+                        <h2>Misi Kami</h2>
+                        <p>
+                            Menciptakan solusi kreatif untuk kebutuhan promosi, event, dan
+                            pencetakan bagi klien.
+                        </p>
+                        <p>
+                            Berkontribusi dalam pembangunan dan penciptaan lapangan kerja.
+                        </p>
+                    </article>
+                    <article>
+                        <span className="about-card-number">03</span>
+                        <h2>Nilai Kami</h2>
+                        <p>
+                            Integritas, kolaborasi, inovasi, dan komitmen pada kualitas
+                            dalam setiap langkah kerja.
+                        </p>
+                    </article>
                 </div>
             </section>
         </div>

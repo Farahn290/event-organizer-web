@@ -8,7 +8,6 @@ function Galeri() {
     const [galeri, setGaleri] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
     useEffect(() => {
 
         const getGaleri = async () => {
@@ -68,19 +67,15 @@ function Galeri() {
         <div className="page gallery-page">
 
             <section className="page-header">
-
+                <div className="gallery-header-tags" aria-label="Jenis galeri">
+                    <span>GALERI FOTO</span>
+                    <span>DOCUMENTATION</span>
+                </div>
+                <h1>Galeri Dokumentasi &amp; <span>Detail Eksekusi</span> Kami</h1>
                 <p>
-                    OUR WORK
+                    Kumpulan dokumentasi event panggung megah, pameran B2B, konstruksi booth,
+                    dan detail produksi terbaik kami.
                 </p>
-
-                <h1>
-                    Galeri
-                </h1>
-
-                <span>
-                    Dokumentasi acara yang kami selenggarakan.
-                </span>
-
             </section>
 
             <section className="gallery-content">
@@ -102,6 +97,7 @@ function Galeri() {
                                     src={`http://localhost:8000/uploads/${item.gambar}`}
                                     alt={item.judul}
                                 />
+                                <span className="gallery-photo-category">{item.kategori || "FOTO EVENT"}</span>
                                 <div className="gallery-photo-caption">
                                     <h2>{item.judul}</h2>
                                     {item.deskripsi && <p>{item.deskripsi}</p>}
@@ -117,15 +113,17 @@ function Galeri() {
                                 return (
                                     <Link
                                         to="/admin"
-                                        className="gallery-upload-slot"
+                                        className="gallery-photo-card gallery-photo-placeholder"
                                         key={`gallery-slot-${slotNumber}`}
                                         aria-label={`Tambah foto event ke slot ${slotNumber} melalui Admin`}
                                     >
-                                        <span className="gallery-upload-icon">
-                                            <ImagePlus size={25} strokeWidth={1.5} aria-hidden="true" />
+                                        <span className="gallery-placeholder-icon">
+                                            <ImagePlus size={23} strokeWidth={1.7} aria-hidden="true" />
                                         </span>
                                         <strong>Slot foto {String(slotNumber).padStart(2, "0")}</strong>
-                                        <span>Tambah foto event melalui Admin</span>
+                                        <span className="gallery-placeholder-help">
+                                            Tambah foto event melalui Admin
+                                        </span>
                                     </Link>
                                 );
                             }
