@@ -9,9 +9,7 @@ frontend/dist/
 # Environment
 .env
 .env.*
-
-# PHP local database config
-backend/config/database.local.php
+!backend/.env.example
 
 # Upload hasil user
 backend/uploads/*

@@ -106,7 +106,7 @@ function Admin() {
             if (editingId) {
 
                 await api.put(
-                    "/layanan/update.php",
+                    "/layanan/update",
                     {
                         id: editingId,
                         nama_layanan: nama,
@@ -117,7 +117,7 @@ function Admin() {
             } else {
 
                 await api.post(
-                    "/layanan/create.php",
+                    "/layanan/create",
                     {
                         nama_layanan: nama,
                         deskripsi: deskripsi
@@ -175,7 +175,7 @@ function Admin() {
         try {
 
             await api.delete(
-                "/layanan/delete.php",
+                "/layanan/delete",
                 {
                     data: {
                         id: id
@@ -238,7 +238,7 @@ function Admin() {
             if (editingEventId) {
 
                 await api.put(
-                    "/events/update.php",
+                    "/events/update",
                     {
                         id: editingEventId,
                         nama_event: namaEvent,
@@ -251,7 +251,7 @@ function Admin() {
             } else {
 
                 await api.post(
-                    "/events/create.php",
+                    "/events/create",
                     {
                         nama_event: namaEvent,
                         tanggal: tanggal,
@@ -318,7 +318,7 @@ function Admin() {
         try {
 
             await api.delete(
-                "/events/delete.php",
+                "/events/delete",
                 {
                     data: {
                         id: id
@@ -402,7 +402,7 @@ function Admin() {
                 }
 
                 await api.post(
-                    "/galeri/update.php",
+                    "/galeri/update",
                     formData
                 );
 
@@ -419,7 +419,7 @@ function Admin() {
                     formData.append("event_id", eventIdGaleri);
                     formData.append("gambar", gambar);
 
-                    await api.post("/galeri/create.php", formData);
+                    await api.post("/galeri/create", formData);
                     uploadedCount += 1;
                 }
             }
@@ -521,7 +521,7 @@ function Admin() {
         try {
 
             await api.post(
-                "/galeri/delete.php",
+                "/galeri/delete",
                 {
                     id: id
                 }

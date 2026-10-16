@@ -65,7 +65,7 @@ function Kontak() {
             ].filter(Boolean).join("\n");
 
             const response = await api.post(
-                "/kontak/create.php",
+                "/kontak/create",
                 {
                     nama: form.nama,
                     email: form.email,

@@ -23,7 +23,7 @@ function Login() {
         try {
 
             const response = await api.post(
-                "/auth/login.php",
+                "/auth/login",
                 {
                     email: email,
                     password: password
