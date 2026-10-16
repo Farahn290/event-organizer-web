@@ -1,0 +1,194 @@
+.intro-splash {
+    position: fixed;
+    z-index: 9999;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse at 50% 48%, rgba(255, 130, 31, 0.2), transparent 38%),
+        radial-gradient(ellipse at 50% 100%, rgba(102, 48, 15, 0.36), transparent 56%),
+        linear-gradient(145deg, #11100f 0%, #292016 48%, #121110 100%);
+    opacity: 1;
+    transition: opacity 500ms ease, visibility 500ms ease;
+}
+
+.intro-splash::before {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(115deg, transparent 0 35%, rgba(255, 255, 255, 0.025) 50%, transparent 66%),
+        radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.58) 100%);
+    content: "";
+    pointer-events: none;
+}
+
+.intro-splash--leaving {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.intro-splash__logo-wrap {
+    position: relative;
+    isolation: isolate;
+    width: min(88vw, 860px);
+    perspective: 1200px;
+    animation: intro-logo-float 2300ms 900ms ease-in-out both;
+    transform: translateZ(0);
+    will-change: transform;
+}
+
+.intro-splash__logo-wrap::before,
+.intro-splash__logo-wrap::after {
+    position: absolute;
+    z-index: -1;
+    inset: -18%;
+    pointer-events: none;
+    content: "";
+}
+
+.intro-splash__logo-wrap::before {
+    border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(255, 126, 27, 0.52), rgba(214, 95, 20, 0.18) 38%, transparent 72%);
+    opacity: 0;
+    transform: translateZ(0);
+    will-change: opacity, transform;
+    animation: intro-logo-glow 1900ms 250ms ease-out both;
+}
+
+.intro-splash__logo-wrap::after {
+    z-index: 1;
+    inset: -10% 0;
+    background: linear-gradient(
+        105deg,
+        transparent 38%,
+        rgba(255, 255, 255, 0.08) 44%,
+        rgba(255, 255, 255, 0.85) 50%,
+        rgba(255, 132, 37, 0.34) 53%,
+        transparent 60%
+    );
+    opacity: 0;
+    transform: translateX(-115%);
+    animation: intro-logo-sweep 1150ms 600ms cubic-bezier(0.2, 0.65, 0.25, 1) both;
+}
+
+.intro-splash__logo {
+    display: block;
+    width: 100%;
+    height: auto;
+    filter:
+        drop-shadow(0 3px 0 rgba(255, 255, 255, 0.5))
+        drop-shadow(0 8px 0 rgba(48, 39, 31, 0.92))
+        drop-shadow(0 18px 12px rgba(0, 0, 0, 0.68));
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+    animation: intro-logo-reveal 1800ms cubic-bezier(0.16, 1, 0.3, 1) both;
+    will-change: opacity, transform;
+}
+
+.intro-splash__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.intro-splash__progress::after {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #ed7621;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: intro-progress 2300ms cubic-bezier(0.65, 0, 0.35, 1) both;
+}
+
+@keyframes intro-logo-reveal {
+    from {
+        opacity: 0;
+        transform: perspective(1200px) rotateY(-5deg) translate3d(-72px, 0, -24px) scale(0.96);
+    }
+
+    to {
+        opacity: 1;
+        transform: perspective(1200px) rotateY(0) translate3d(0, 0, 0) scale(1);
+    }
+}
+
+@keyframes intro-logo-float {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px) rotateX(1deg);
+    }
+}
+
+@keyframes intro-logo-glow {
+    0% {
+        opacity: 0;
+        transform: scale(0.7);
+    }
+
+    55% {
+        opacity: 0.92;
+        transform: scale(1.04);
+    }
+
+    100% {
+        opacity: 0.7;
+        transform: scale(1.12);
+    }
+}
+
+@keyframes intro-logo-sweep {
+    0% {
+        opacity: 0;
+        transform: translateX(-115%);
+    }
+
+    20%,
+    75% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(115%);
+    }
+}
+
+@keyframes intro-progress {
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .intro-splash__logo-wrap {
+        width: min(90vw, 520px);
+    }
+
+    .intro-splash__logo {
+        filter:
+            drop-shadow(0 3px 0 rgba(255, 255, 255, 0.5))
+            drop-shadow(0 7px 0 rgba(48, 39, 31, 0.92))
+            drop-shadow(0 13px 9px rgba(0, 0, 0, 0.68));
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .intro-splash__logo-wrap,
+    .intro-splash__logo-wrap::before,
+    .intro-splash__logo-wrap::after,
+    .intro-splash__logo,
+    .intro-splash__progress::after {
+        animation-duration: 1ms;
+    }
+}

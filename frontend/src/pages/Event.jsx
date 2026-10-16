@@ -1,10 +1,25 @@
 import { useEffect, useState } from "react";
 import { useMemo } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Images, MapPin, X } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Images, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { useLanguage } from "../contexts/LanguageContext";
 
 const categories = ["All Events", "Wedding", "Birthday", "Corporate", "Concert"];
+const categoryTranslationKeys = {
+    "All Events": "allEvents",
+    Wedding: "wedding",
+    Birthday: "birthday",
+    Corporate: "corporate",
+    Concert: "concert"
+};
+const categoryDescriptionKeys = {
+    Wedding: "eventDescriptionWedding",
+    Birthday: "eventDescriptionBirthday",
+    Corporate: "eventDescriptionCorporate",
+    Concert: "eventDescriptionConcert"
+};
+const eventGalleryAccents = ["#f2ca75", "#62e4ea", "#9b9bff", "#f4a77b", "#62e4ea", "#9b9bff"];
 
 const sampleEvents = [
     {
@@ -172,6 +187,7 @@ const galleryPhotosFor = (event, coverImage) => {
 };
 
 function Event() {
+    const { t } = useLanguage();
 
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -204,8 +220,12 @@ function Event() {
         };
     }, [selectedGallery]);
 
-    const openGallery = (event, image) => {
-        setSelectedGallery({ event, photos: galleryPhotosFor(event, image) });
+    const openGallery = (event, image, index) => {
+        setSelectedGallery({
+            event,
+            photos: galleryPhotosFor(event, image),
+            accent: eventGalleryAccents[index] || "#f2ca75"
+        });
         setActivePhotoIndex(0);
     };
 
@@ -265,15 +285,12 @@ function Event() {
             <section className="event-archive">
                 <header className="event-archive-header">
                     <div className="event-archive-title">
-                        <span className="event-archive-eyebrow">EVENT TERBARU</span>
-                        <h1>Our Recent <span>Masterpieces</span></h1>
-                        <p>
-                            Jelajahi berbagai proyek, pameran, dan aktivasi brand yang telah kami
-                            sukseskan dengan standar tertinggi.
-                        </p>
+                        <span className="event-archive-eyebrow">{t("eventsEyebrow")}</span>
+                        <h1>{t("recentMasterpieces")}</h1>
+                        <p>{t("eventsIntro")}</p>
                     </div>
 
-                    <div className="event-filters" role="group" aria-label="Filter kategori event">
+                    <div className="event-filters" role="group" aria-label={t("categoryFilter")}>
                         {categories.map((category) => (
                             <button
                                 type="button"
@@ -282,18 +299,18 @@ function Event() {
                                 aria-pressed={activeCategory === category}
                                 onClick={() => setActiveCategory(category)}
                             >
-                                {category}
+                                {t(categoryTranslationKeys[category])}
                             </button>
                         ))}
                     </div>
                 </header>
 
-                {loading && <p className="event-archive-state" role="status">Memuat event...</p>}
+                {loading && <p className="event-archive-state" role="status">{t("loadingEventsPage")}</p>}
 
                 {!loading && error && <p className="event-archive-state" role="alert">{error}</p>}
 
                 {!loading && visibleEvents.length === 0 && (
-                    <p className="event-archive-state">Belum ada event dalam kategori ini.</p>
+                    <p className="event-archive-state">{t("noEventsCategory")}</p>
                 )}
 
                 {!loading && !error && visibleEvents.length > 0 && (
@@ -309,6 +326,8 @@ function Event() {
                                         ? "/corporate-2025-ifg.png"
                                     : eventImage(event, index);
                             const photoCount = galleryPhotosFor(event, image).length;
+                            const description = event.deskripsi?.trim()
+                                || t(categoryDescriptionKeys[category] || "eventDescriptionDefault");
 
                             return (
                                 <article
@@ -316,46 +335,46 @@ function Event() {
                                     key={event.id}
                                     role="button"
                                     tabIndex={0}
-                                    aria-label={`Lihat galeri berisi ${photoCount} foto untuk ${event.nama_event}`}
-                                    onClick={() => openGallery(event, image)}
+                                    aria-label={t("seeEventGallery", { count: photoCount, name: event.nama_event })}
+                                    onClick={() => openGallery(event, image, index)}
                                     onKeyDown={(keyEvent) => {
                                         if (keyEvent.target !== keyEvent.currentTarget) return;
                                         if (keyEvent.key === "Enter" || keyEvent.key === " ") {
                                             keyEvent.preventDefault();
-                                            openGallery(event, image);
+                                            openGallery(event, image, index);
                                         }
                                     }}
                                 >
                                     <div className={`event-archive-image${category === "Concert" && year === "2025" ? " event-archive-image--concert-2025" : ""}${event.id === "archive-birthday" ? " event-archive-image--full" : ""}`}>
                                         <img src={image} alt={event.nama_event} />
-                                        <span className="event-archive-tag">
-                                            {(event.label || category).toUpperCase()} · {year}
-                                        </span>
+                                        <span className="event-archive-date">{year}</span>
                                         <span className="event-archive-gallery-hint">
                                             <Images size={13} aria-hidden="true" />
                                             <span className="event-archive-gallery-count">{photoCount}</span>
                                             <span className="event-archive-gallery-label">
-                                                Jelajahi galeri <ArrowRight size={12} aria-hidden="true" />
+                                                {t("exploreGallery")} <ArrowRight size={12} aria-hidden="true" />
                                             </span>
                                         </span>
                                     </div>
+                                    <span className="event-archive-tag">
+                                        {(event.label || category).toUpperCase()}
+                                    </span>
                                     <div className="event-archive-card-body">
                                         <h2>{event.nama_event}</h2>
                                         <p className="event-archive-location">
                                             <MapPin size={12} aria-hidden="true" />
                                             <span>{event.lokasi}</span>
                                         </p>
-                                        {event.deskripsi && (
-                                            <p className="event-archive-description">{event.deskripsi}</p>
-                                        )}
+                                        <p className="event-archive-description">{description}</p>
                                         <div className="event-archive-footer">
                                             <span>{event.produksi || sampleEvents[index % sampleEvents.length].produksi}</span>
                                             <Link
                                                 to="/kontak"
-                                                aria-label={`Konsultasi untuk ${event.nama_event}`}
+                                                aria-label={t("eventConsultation", { name: event.nama_event })}
                                                 onClick={(clickEvent) => clickEvent.stopPropagation()}
                                                 onKeyDown={(keyEvent) => keyEvent.stopPropagation()}
                                             >
+                                                {t("viewDetails")}
                                                 <ArrowRight size={15} aria-hidden="true" />
                                             </Link>
                                         </div>
@@ -377,29 +396,44 @@ function Event() {
                         className="event-gallery-dialog"
                         role="dialog"
                         aria-modal="true"
-                        aria-label={`Foto event ${selectedGallery.event.nama_event}`}
+                        aria-label={`${t("eventGallery")} ${selectedGallery.event.nama_event}`}
+                        style={{ "--event-gallery-accent": selectedGallery.accent }}
                         onClick={(clickEvent) => clickEvent.stopPropagation()}
                     >
-                        <button
-                            type="button"
-                            className="event-gallery-close"
-                            aria-label="Tutup galeri"
-                            onClick={() => setSelectedGallery(null)}
-                        >
-                            <X size={20} aria-hidden="true" />
-                        </button>
+                        <header className="event-gallery-header">
+                            <button
+                                type="button"
+                                className="event-gallery-back"
+                                onClick={() => setSelectedGallery(null)}
+                            >
+                                <ChevronLeft size={16} aria-hidden="true" />
+                                {t("back")}
+                            </button>
+                            <div className="event-gallery-heading">
+                                <h2>{selectedGallery.event.nama_event}</h2>
+                                <p><MapPin size={14} aria-hidden="true" /> {selectedGallery.event.lokasi}</p>
+                            </div>
+                            <span className="event-gallery-count">
+                                {t("eventGallery")} · {selectedGallery.photos.length} {t("photos")}
+                            </span>
+                        </header>
 
-                        <div className="event-gallery-stage">
-                            <img
-                                src={selectedGallery.photos[activePhotoIndex]}
-                                alt={`${selectedGallery.event.nama_event}, foto ${activePhotoIndex + 1}`}
-                            />
+                        <div className="event-gallery-layout">
+                            <div className="event-gallery-feature">
+                                <img
+                                    src={selectedGallery.photos[activePhotoIndex]}
+                                    alt={t("photoNumber", { name: selectedGallery.event.nama_event, number: activePhotoIndex + 1 })}
+                                />
+                                <span className="event-gallery-photo-index">
+                                    {String(activePhotoIndex + 1).padStart(2, "0")} / {String(selectedGallery.photos.length).padStart(2, "0")}
+                                </span>
+                            </div>
                             {selectedGallery.photos.length > 1 && (
                                 <>
                                     <button
                                         type="button"
                                         className="event-gallery-nav event-gallery-nav--previous"
-                                        aria-label="Foto sebelumnya"
+                                        aria-label={t("previousPhoto")}
                                         onClick={() => setActivePhotoIndex((index) => (
                                             (index - 1 + selectedGallery.photos.length) % selectedGallery.photos.length
                                         ))}
@@ -409,7 +443,7 @@ function Event() {
                                     <button
                                         type="button"
                                         className="event-gallery-nav event-gallery-nav--next"
-                                        aria-label="Foto berikutnya"
+                                        aria-label={t("nextPhoto")}
                                         onClick={() => setActivePhotoIndex((index) => (
                                             (index + 1) % selectedGallery.photos.length
                                         ))}
@@ -418,15 +452,30 @@ function Event() {
                                     </button>
                                 </>
                             )}
-                        </div>
+                            <div className="event-gallery-thumbnails" aria-label={t("otherPhotos")}>
+                                {selectedGallery.photos.length > 1 && Array.from(
+                                    { length: Math.min(3, selectedGallery.photos.length - 1) },
+                                    (_, thumbnailIndex) => {
+                                        const photoIndex = (activePhotoIndex + thumbnailIndex + 1) % selectedGallery.photos.length;
 
-                        <footer className="event-gallery-caption">
-                            <div>
-                                <h2>{selectedGallery.event.nama_event}</h2>
-                                <p>{selectedGallery.event.lokasi}</p>
+                                        return (
+                                            <button
+                                                type="button"
+                                                className="event-gallery-thumbnail"
+                                                key={`${selectedGallery.photos[photoIndex]}-${photoIndex}`}
+                                                aria-label={t("showPhoto", { number: photoIndex + 1 })}
+                                                onClick={() => setActivePhotoIndex(photoIndex)}
+                                            >
+                                                <img
+                                                    src={selectedGallery.photos[photoIndex]}
+                                                    alt=""
+                                                />
+                                            </button>
+                                        );
+                                    }
+                                )}
                             </div>
-                            <span>{activePhotoIndex + 1} / {selectedGallery.photos.length}</span>
-                        </footer>
+                        </div>
                     </section>
                 </div>
             )}

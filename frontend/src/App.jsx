@@ -6,16 +6,19 @@ import {
 
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import IntroSplash from "./components/IntroSplash";
 
 import Home from "./pages/Home";
 import Tentang from "./pages/Tentang";
 import Layanan from "./pages/Layanan";
+import LayananDetail from "./pages/LayananDetail";
 import Event from "./pages/Event";
 import Galeri from "./pages/Galeri";
 import Kontak from "./pages/Kontak";
 
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 
 
@@ -25,6 +28,8 @@ function App() {
 
         <BrowserRouter>
 
+            <LanguageProvider>
+            <IntroSplash />
             <Routes>
 
                 <Route
@@ -55,6 +60,17 @@ function App() {
                         <>
                             <Navbar />
                             <Layanan />
+                            <Footer />
+                        </>
+                    }
+                />
+
+                <Route
+                    path="/layanan/:id"
+                    element={
+                        <>
+                            <Navbar />
+                            <LayananDetail />
                             <Footer />
                         </>
                     }
@@ -108,6 +124,7 @@ function App() {
                 />
 
             </Routes>
+            </LanguageProvider>
 
         </BrowserRouter>
 

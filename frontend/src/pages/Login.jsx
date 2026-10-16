@@ -71,6 +71,7 @@ function Login() {
     return (
 
         <div
+            className="auth-page"
             style={{
                 minHeight: "100vh",
                 display: "flex",
@@ -82,6 +83,7 @@ function Login() {
         >
 
             <div
+                className="auth-card"
                 style={{
                     width: "400px",
                     background: "#fff",
@@ -91,7 +93,7 @@ function Login() {
             >
 
                 <img
-                    src="/maqnet-kreasindo-logo.png"
+                    src="/maqnet-kreasindo-transparent.png"
                     alt="Maqnet Kreasindo"
                     className="auth-brand-image"
                 />

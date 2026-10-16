@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { ImagePlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { useLanguage } from "../contexts/LanguageContext";
 
 function Galeri() {
+    const { t } = useLanguage();
 
     const [galeri, setGaleri] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -67,21 +69,18 @@ function Galeri() {
         <div className="page gallery-page">
 
             <section className="page-header">
-                <div className="gallery-header-tags" aria-label="Jenis galeri">
-                    <span>GALERI FOTO</span>
-                    <span>DOCUMENTATION</span>
+                <div className="gallery-header-tags" aria-label={t("gallery")}>
+                    <span>{t("photoGallery")}</span>
+                    <span>{t("documentation")}</span>
                 </div>
-                <h1>Galeri Dokumentasi &amp; <span>Detail Eksekusi</span> Kami</h1>
-                <p>
-                    Kumpulan dokumentasi event panggung megah, pameran B2B, konstruksi booth,
-                    dan detail produksi terbaik kami.
-                </p>
+                <h1>{t("galleryHeaderTitle")}</h1>
+                <p>{t("galleryHeaderDescription")}</p>
             </section>
 
             <section className="gallery-content">
 
                 {loading && (
-                    <p className="gallery-state" role="status">Memuat galeri...</p>
+                    <p className="gallery-state" role="status">{t("loadingGallery")}</p>
                 )}
 
                 {!loading && error && (
@@ -97,7 +96,7 @@ function Galeri() {
                                     src={`http://localhost:8000/uploads/${item.gambar}`}
                                     alt={item.judul}
                                 />
-                                <span className="gallery-photo-category">{item.kategori || "FOTO EVENT"}</span>
+                                <span className="gallery-photo-category">{item.kategori || t("eventPhoto")}</span>
                                 <div className="gallery-photo-caption">
                                     <h2>{item.judul}</h2>
                                     {item.deskripsi && <p>{item.deskripsi}</p>}
@@ -115,14 +114,14 @@ function Galeri() {
                                         to="/admin"
                                         className="gallery-photo-card gallery-photo-placeholder"
                                         key={`gallery-slot-${slotNumber}`}
-                                        aria-label={`Tambah foto event ke slot ${slotNumber} melalui Admin`}
+                                        aria-label={t("addPhotoSlot", { number: slotNumber })}
                                     >
                                         <span className="gallery-placeholder-icon">
                                             <ImagePlus size={23} strokeWidth={1.7} aria-hidden="true" />
                                         </span>
-                                        <strong>Slot foto {String(slotNumber).padStart(2, "0")}</strong>
+                                        <strong>{t("photoSlot", { number: String(slotNumber).padStart(2, "0") })}</strong>
                                         <span className="gallery-placeholder-help">
-                                            Tambah foto event melalui Admin
+                                            {t("addPhotoThroughAdmin")}
                                         </span>
                                     </Link>
                                 );

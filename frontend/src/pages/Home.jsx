@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Award, PartyPopper, Smile, Users } from "lucide-react";
 import api from "../services/api";
+import { useLanguage } from "../contexts/LanguageContext";
 import homeHeroImage1 from "../assets/home-hero-1.png";
 import homeHeroImage2 from "../assets/home-hero-2.png";
 import homeHeroImage3 from "../assets/home-hero-3-festival.png";
@@ -17,7 +18,7 @@ const heroImages = [
 ];
 
 const featuredClients = Array.from({ length: 24 }, (_, index) =>
-    `/client-logos-mono/logo-${String(index + 1).padStart(2, "0")}.png`
+    `/client-logos/logo-${String(index + 1).padStart(2, "0")}.png`
 );
 const featuredClientRows = [
     featuredClients.slice(0, 12),
@@ -27,31 +28,32 @@ const featuredClientRows = [
 const homeStats = [
     {
         value: "150+",
-        label: "Events Completed",
-        description: "From intimate galas to arenas",
+        label: "eventsCompleted",
+        description: "intimateGalas",
         Icon: PartyPopper
     },
     {
         value: "100+",
-        label: "Happy Clients",
-        description: "High-profile brands & families",
+        label: "happyClients",
+        description: "highProfile",
         Icon: Smile
     },
     {
         value: "10+",
-        label: "Years Experience",
-        description: "Industry standards of excellence",
+        label: "yearsExperience",
+        description: "industryStandards",
         Icon: Award
     },
     {
         value: "50+",
-        label: "Professional Team",
-        description: "Directors, stage crew & designers",
+        label: "professionalTeam",
+        description: "teamDescription",
         Icon: Users
     }
 ];
 
 function Home() {
+    const { t } = useLanguage();
 
     const [layanan, setLayanan] = useState([]);
     const [events, setEvents] = useState([]);
@@ -140,35 +142,42 @@ function Home() {
 
             <section className="hero">
                 <div className="hero-slideshow" aria-hidden="true">
-                    {heroImages.map((image, index) => (
-                        <img
-                            className={`hero-slide${index === activeHeroImage ? " is-active" : ""}`}
-                            src={image}
-                            alt=""
-                            key={image}
-                        />
-                    ))}
+                    <div
+                        className="hero-slideshow-track"
+                        style={{
+                            width: `${heroImages.length * 100}%`,
+                            transform: `translateX(-${activeHeroImage * (100 / heroImages.length)}%)`
+                        }}
+                    >
+                        {heroImages.map((image, index) => (
+                            <img
+                                className={`hero-slide${index === activeHeroImage ? " is-active" : ""}`}
+                                src={image}
+                                alt=""
+                                key={image}
+                                style={{ flexBasis: `${100 / heroImages.length}%` }}
+                            />
+                        ))}
+                    </div>
                 </div>
                 <div className="hero-content">
                     <p className="hero-kicker">
                         <span aria-hidden="true" />
-                        PREMIER EVENT ORGANIZER &amp; PRODUCTION
+                        {t("heroKicker")}
                     </p>
                     <h1>
-                        <span>Create Moments.</span>
-                        <span className="hero-highlight">Celebrate Life.</span>
+                        <span>{t("heroCreateMoments")}</span>
+                        <span className="hero-highlight">{t("heroCelebrateLife")}</span>
                     </h1>
                     <p className="hero-description">
-                        Kami mengubah acara impian Anda menjadi pengalaman tak terlupakan. Dari
-                        konsep eksklusif, kurasi visual mewah, hingga eksekusi panggung kelas dunia
-                        dengan presisi sempurna.
+                        {t("heroDescription")}
                     </p>
                     <div className="hero-buttons">
                         <Link to="/layanan" className="btn-primary">
-                            Explore Our Services <span aria-hidden="true">↗</span>
+                            {t("exploreServices")} <span aria-hidden="true">↗</span>
                         </Link>
                         <Link to="/kontak" className="btn-secondary">
-                            Hubungi Kami
+                            {t("contactUs")}
                         </Link>
                     </div>
                 </div>
@@ -181,8 +190,8 @@ function Home() {
                                 </span>
                                 <div className="home-stat-content">
                                     <strong>{value}</strong>
-                                    <h3>{label}</h3>
-                                    <p>{description}</p>
+                                    <h3>{t(label)}</h3>
+                                    <p>{t(description)}</p>
                                 </div>
                             </article>
                         ))}
@@ -196,21 +205,21 @@ function Home() {
                 {/* SERVICES */}
 
                 <section className="home-section home-services">
+                <span className="home-feature-watermark" aria-hidden="true">SERVICES</span>
 
                 <div className="section-heading">
 
                     <div>
 
                         <p className="section-label">
-                            OUR SERVICES
+                            {t("ourServices")}
                         </p>
 
                         <h2>
-                            Layanan <span className="home-services-title-accent">Kami</span>
+                            {t("services")}
                         </h2>
                         <p className="home-services-description">
-                            Solusi komprehensif dari perencanaan kreatif, kontraktor pameran,
-                            hingga eksekusi teknis berstandar tinggi.
+                            {t("serviceDescription")}
                         </p>
 
                     </div>
@@ -219,7 +228,7 @@ function Home() {
                         to="/layanan"
                         className="text-link"
                     >
-                        Lihat Semua →
+                        {t("seeAll")} →
                     </Link>
 
                 </div>
@@ -228,7 +237,7 @@ function Home() {
                 {loading ? (
 
                     <p>
-                        Memuat layanan...
+                        {t("loadingServices")}
                     </p>
 
                 ) : (
@@ -258,7 +267,7 @@ function Home() {
                                     to="/kontak"
                                     className="card-link"
                                 >
-                                    Konsultasi →
+                                    {t("consultation")} →
                                 </Link>
 
                             </div>
@@ -275,21 +284,21 @@ function Home() {
                 {/* EVENTS */}
 
                 <section className="home-section home-events">
+                <span className="home-feature-watermark" aria-hidden="true">EVENT</span>
 
                 <div className="section-heading">
 
                     <div>
 
                         <p className="section-label">
-                            OUR EVENTS
+                            {t("ourEvents")}
                         </p>
 
                         <h2>
-                            Event <span className="home-section-title-accent">Terbaru</span>
+                            {t("latestEvents")}
                         </h2>
                         <p className="home-section-description">
-                            Momen dan produksi acara terbaru yang kami wujudkan dengan
-                            perencanaan matang dan eksekusi profesional.
+                            {t("latestEventDescription")}
                         </p>
 
                     </div>
@@ -298,7 +307,7 @@ function Home() {
                         to="/event"
                         className="text-link"
                     >
-                        Lihat Semua →
+                        {t("seeAll")} →
                     </Link>
 
                 </div>
@@ -307,13 +316,13 @@ function Home() {
                 {loading ? (
 
                     <p>
-                        Memuat event...
+                        {t("loadingEvents")}
                     </p>
 
                 ) : events.length === 0 ? (
 
                     <p>
-                        Belum ada event.
+                        {t("noEvents")}
                     </p>
 
                 ) : (
@@ -365,21 +374,21 @@ function Home() {
                 {/* GALLERY */}
 
                 <section className="home-section home-gallery">
+                <span className="home-feature-watermark" aria-hidden="true">GALLERY</span>
 
                 <div className="section-heading">
 
                     <div>
 
                         <p className="section-label">
-                            OUR GALLERY
+                            {t("ourGallery")}
                         </p>
 
                         <h2>
-                            Dokumentasi <span className="home-section-title-accent">Event</span>
+                            {t("gallery")}
                         </h2>
                         <p className="home-section-description">
-                            Kumpulan arsip momen-momen berharga dan pengalaman luar biasa dari
-                            berbagai event yang telah kami sukseskan.
+                            {t("galleryDescription")}
                         </p>
 
                     </div>
@@ -388,7 +397,7 @@ function Home() {
                         to="/galeri"
                         className="text-link"
                     >
-                        Lihat Galeri →
+                        {t("seeAll")} {t("gallery")} →
                     </Link>
 
                 </div>
@@ -436,7 +445,7 @@ function Home() {
 
             <section className="home-featured-clients" aria-label="Pelanggan unggulan">
                 <div className="hero-clients">
-                    <p className="hero-clients-label">Pelanggan Unggulan</p>
+                    <p className="hero-clients-label">{t("featuredClients")}</p>
                     <div className="hero-clients-window">
                         <div className="hero-clients-rows">
                             {featuredClientRows.map((row, rowIndex) => (
@@ -469,30 +478,31 @@ function Home() {
             {/* CTA */}
 
             <section className="home-cta">
-
-                <div className="home-cta-background" aria-hidden="true" />
-
-                <div>
-
-                    <p className="section-label">
-                        HAVE AN EVENT IN MIND?
-                    </p>
-
+                <div className="home-cta-content">
+                    <p className="home-cta-eyebrow">{t("haveEvent")}</p>
                     <h2>
-                        Let's Create
+                        {t("createMoments")}
                         <br />
-                        Something Amazing.
+                        <span>{t("somethingAmazing")}</span>
                     </h2>
-
+                    <p className="home-cta-description">
+                        {t("ctaDescription")}
+                    </p>
                     <Link
                         to="/kontak"
                         className="cta-button"
                     >
-                        Mulai Konsultasi →
+                        {t("startConsultation")} <span aria-hidden="true">→</span>
                     </Link>
-
                 </div>
 
+                <div className="home-cta-visuals">
+                    <img
+                        className="home-cta-infographic"
+                        src="/home-services-infographic.png"
+                        alt="Infografik layanan Out of Home Advertisement, Event Management, Exhibition Contractor, dan One Stop Printing Solution"
+                    />
+                </div>
             </section>
 
         </div>

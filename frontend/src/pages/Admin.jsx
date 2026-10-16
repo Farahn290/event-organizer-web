@@ -583,6 +583,7 @@ function Admin() {
     return (
 
         <div
+            className="admin-page"
             style={{
                 minHeight: "100vh",
                 background: "#f5f5f5",
@@ -615,7 +616,7 @@ function Admin() {
                     </p>
 
                     <img
-                        src="/maqnet-kreasindo-logo.png"
+                        src="/maqnet-kreasindo-transparent.png"
                         alt="Maqnet Kreasindo"
                         className="admin-brand-image"
                     />

@@ -9,8 +9,10 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { useLanguage } from "../contexts/LanguageContext";
 
 function Kontak() {
+    const { t, language } = useLanguage();
 
     const [form, setForm] = useState({
         nama: "",
@@ -46,12 +48,20 @@ function Kontak() {
 
         try {
 
+            const budgetLabels = {
+                "under-25m": t("under25m"),
+                "25m-75m": t("budget25to75"),
+                "75m-150m": t("budget75to150"),
+                "over-150m": t("over150m"),
+                discuss: t("discussBudget")
+            };
+
             const detailPesan = [
-                form.jenis_event && `Jenis event: ${form.jenis_event}`,
-                form.tanggal_event && `Estimasi tanggal: ${form.tanggal_event}`,
-                form.budget && `Estimasi budget: ${form.budget}`,
-                form.lokasi && `Lokasi / venue: ${form.lokasi}`,
-                form.pesan && `Catatan konsep: ${form.pesan}`
+                form.jenis_event && `${language === "en" ? "Event type" : "Jenis event"}: ${form.jenis_event}`,
+                form.tanggal_event && `${language === "en" ? "Estimated date" : "Estimasi tanggal"}: ${form.tanggal_event}`,
+                form.budget && `${language === "en" ? "Estimated budget" : "Estimasi budget"}: ${budgetLabels[form.budget] || form.budget}`,
+                form.lokasi && `${language === "en" ? "Preferred location / venue" : "Lokasi / venue"}: ${form.lokasi}`,
+                form.pesan && `${language === "en" ? "Concept notes" : "Catatan konsep"}: ${form.pesan}`
             ].filter(Boolean).join("\n");
 
             const response = await api.post(
@@ -72,7 +82,7 @@ function Kontak() {
             if (response.data.success) {
 
                 setMessage(
-                    "Pesan berhasil dikirim. Kami akan segera menghubungi Anda."
+                    t("messageSent")
                 );
 
                 setForm({
@@ -90,7 +100,7 @@ function Kontak() {
 
                 setError(
                     response.data.message ||
-                    "Gagal mengirim pesan"
+                    t("failedMessage")
                 );
 
             }
@@ -104,7 +114,7 @@ function Kontak() {
 
             setError(
                 error.response?.data?.message ||
-                "Tidak dapat terhubung ke server"
+                t("cannotConnect")
             );
 
         } finally {
@@ -118,31 +128,29 @@ function Kontak() {
         <div className="page contact-page">
             <section className="contact-layout">
                 <div className="contact-form-panel">
-                    <p className="contact-kicker">RESERVE YOUR EVENT DATE</p>
-                    <h1>Konsultasikan Acara Impian Anda</h1>
-                    <p className="contact-intro-copy">
-                        Isi formulir reservasi eksklusif di bawah ini. Tim kami akan menghubungi Anda dalam waktu 24 jam.
-                    </p>
+                    <p className="contact-kicker">{t("reserveDate")}</p>
+                    <h1>{t("contactTitle")}</h1>
+                    <p className="contact-intro-copy">{t("contactIntro")}</p>
 
                     {message && <div className="contact-alert success" role="status">{message}</div>}
                     {error && <div className="contact-alert error" role="alert">{error}</div>}
 
                     <form className="contact-booking-form" onSubmit={handleSubmit}>
                         <label className="contact-field">
-                            <span>FULL NAME</span>
+                            <span>{t("fullName")}</span>
                             <input
                                 type="text"
                                 name="nama"
                                 value={form.nama}
                                 onChange={handleChange}
-                                placeholder="Nama lengkap"
+                                placeholder={t("fullNamePlaceholder")}
                                 autoComplete="name"
                                 required
                             />
                         </label>
 
                         <label className="contact-field">
-                            <span>EMAIL ADDRESS</span>
+                            <span>{t("emailAddress")}</span>
                             <input
                                 type="email"
                                 name="email"
@@ -155,7 +163,7 @@ function Kontak() {
                         </label>
 
                         <label className="contact-field">
-                            <span>PHONE / WHATSAPP</span>
+                            <span>{t("phoneWhatsapp")}</span>
                             <input
                                 type="tel"
                                 name="no_hp"
@@ -167,21 +175,21 @@ function Kontak() {
                         </label>
 
                         <label className="contact-field">
-                            <span>EVENT TYPE</span>
+                            <span>{t("eventType")}</span>
                             <select name="jenis_event" value={form.jenis_event} onChange={handleChange} required>
-                                <option value="">Pilih jenis event...</option>
-                                <option>Wedding</option>
-                                <option>Corporate Event</option>
-                                <option>Birthday Party</option>
-                                <option>Concert &amp; Festival</option>
-                                <option>Seminar &amp; Workshop</option>
-                                <option>Private Event</option>
-                                <option>Lainnya</option>
+                                <option value="">{t("chooseEventType")}</option>
+                                <option value="Wedding">{t("wedding")}</option>
+                                <option value="Corporate Event">{t("corporateEvent")}</option>
+                                <option value="Birthday Party">{t("birthdayParty")}</option>
+                                <option value="Concert & Festival">{t("concertFestival")}</option>
+                                <option value="Seminar & Workshop">{t("seminarWorkshop")}</option>
+                                <option value="Private Event">{t("privateEvent")}</option>
+                                <option value="Other">{t("other")}</option>
                             </select>
                         </label>
 
                         <label className="contact-field">
-                            <span>ESTIMATED EVENT DATE</span>
+                            <span>{t("estimatedDate")}</span>
                             <input
                                 type="date"
                                 name="tanggal_event"
@@ -191,35 +199,35 @@ function Kontak() {
                         </label>
 
                         <label className="contact-field">
-                            <span>ESTIMATED BUDGET</span>
+                            <span>{t("estimatedBudget")}</span>
                             <select name="budget" value={form.budget} onChange={handleChange}>
-                                <option value="">Pilih estimasi budget...</option>
-                                <option>Di bawah Rp25 juta</option>
-                                <option>Rp25 juta - Rp75 juta</option>
-                                <option>Rp75 juta - Rp150 juta</option>
-                                <option>Di atas Rp150 juta</option>
-                                <option>Diskusikan lebih lanjut</option>
+                                <option value="">{t("chooseBudget")}</option>
+                                <option value="under-25m">{t("under25m")}</option>
+                                <option value="25m-75m">{t("budget25to75")}</option>
+                                <option value="75m-150m">{t("budget75to150")}</option>
+                                <option value="over-150m">{t("over150m")}</option>
+                                <option value="discuss">{t("discussBudget")}</option>
                             </select>
                         </label>
 
                         <label className="contact-field full-width">
-                            <span>PREFERRED LOCATION / VENUE</span>
+                            <span>{t("preferredVenue")}</span>
                             <input
                                 type="text"
                                 name="lokasi"
                                 value={form.lokasi}
                                 onChange={handleChange}
-                                placeholder="Contoh: ballroom hotel, outdoor venue, atau belum ada"
+                                placeholder={t("venuePlaceholder")}
                             />
                         </label>
 
                         <label className="contact-field full-width">
-                            <span>ADDITIONAL CONCEPT NOTES &amp; WISHES</span>
+                            <span>{t("conceptNotes")}</span>
                             <textarea
                                 name="pesan"
                                 value={form.pesan}
                                 onChange={handleChange}
-                                placeholder="Ceritakan konsep impian Anda, jumlah tamu, atau kebutuhan khusus lainnya..."
+                                placeholder={t("conceptPlaceholder")}
                                 rows="3"
                                 required
                             />
@@ -227,47 +235,45 @@ function Kontak() {
 
                         <button className="contact-submit" type="submit" disabled={loading}>
                             <Send size={14} aria-hidden="true" />
-                            {loading ? "MENGIRIM..." : "SUBMIT BOOKING REQUEST"}
+                            {loading ? t("sending") : t("submitRequest")}
                         </button>
                     </form>
                 </div>
 
                 <aside className="contact-sidebar">
                     <section className="contact-info-panel">
-                        <h2>VIP Direct Contact</h2>
-                        <p className="contact-sidebar-intro">
-                            Untuk kebutuhan mendesak atau penjadwalan private pitching meeting secara tatap muka dengan tim Eventora.
-                        </p>
+                        <h2>{t("vipContact")}</h2>
+                        <p className="contact-sidebar-intro">{t("urgentContact")}</p>
 
                         <a className="contact-info-row" href="https://wa.me/6281234567890">
                             <span className="contact-info-icon"><MessageCircle size={15} aria-hidden="true" /></span>
-                            <span><small>WHATSAPP DIRECT HOTLINE</small><strong>+62 812-3456-7890</strong><em>Respon cepat saat jam operasional</em></span>
+                            <span><small>{t("whatsappHotline")}</small><strong>+62 812-3456-7890</strong><em>{t("quickResponse")}</em></span>
                         </a>
 
                         <a className="contact-info-row" href="mailto:hello@eventora.com">
                             <span className="contact-info-icon"><Mail size={15} aria-hidden="true" /></span>
-                            <span><small>OFFICIAL INQUIRY</small><strong>hello@eventora.com</strong><em>Proposal &amp; vendor partnership</em></span>
+                            <span><small>{t("officialInquiry")}</small><strong>hello@eventora.com</strong><em>{t("proposalPartner")}</em></span>
                         </a>
 
                         <div className="contact-info-row">
                             <span className="contact-info-icon"><MapPin size={15} aria-hidden="true" /></span>
-                            <span><small>MAIN STUDIO OFFICE</small><strong>Jakarta, Indonesia</strong><em>Meeting by appointment</em></span>
+                            <span><small>{t("mainStudio")}</small><strong>{t("jakarta")}</strong><em>{t("meetingByAppointment")}</em></span>
                         </div>
 
                         <div className="contact-info-row">
                             <span className="contact-info-icon"><Clock3 size={15} aria-hidden="true" /></span>
-                            <span><small>OPERATING HOURS</small><strong>Senin - Minggu</strong><em>09:00 - 21:00 WIB</em></span>
+                            <span><small>{t("operatingHours")}</small><strong>{t("mondaySunday")}</strong><em>09:00 - 21:00 WIB</em></span>
                         </div>
 
                         <div className="contact-social-row">
-                            <span>SOCIAL SHOWCASE</span>
-                            <Link to="/galeri">Lihat galeri <ArrowUpRight size={12} aria-hidden="true" /></Link>
+                            <span>{t("socialShowcase")}</span>
+                            <Link to="/galeri">{t("seeGallery")} <ArrowUpRight size={12} aria-hidden="true" /></Link>
                         </div>
                     </section>
 
                     <div className="contact-map-panel">
                         <iframe
-                            title="Peta lokasi Eventora di Jakarta"
+                            title={t("jakarta")}
                             src="https://www.openstreetmap.org/export/embed.html?bbox=106.81%2C-6.23%2C106.88%2C-6.18&amp;layer=mapnik&amp;marker=-6.2088%2C106.8456"
                             loading="lazy"
                         />
@@ -277,7 +283,7 @@ function Kontak() {
                             target="_blank"
                             rel="noreferrer"
                         >
-                            <MapPin size={13} aria-hidden="true" /> JAKARTA, INDONESIA
+                            <MapPin size={13} aria-hidden="true" /> {t("jakartaIndonesia")}
                         </a>
                     </div>
                 </aside>
