@@ -30,10 +30,8 @@ function Login() {
                 }
             );
 
-            console.log("Response:", response.data);
-
-
             if (response.data.success) {
+                localStorage.setItem("adminToken", response.data.token);
 
                 localStorage.setItem(
                     "admin",
@@ -133,7 +131,7 @@ function Login() {
 
                         <input
                             type="email"
-                            placeholder="admin@eventora.com"
+                            placeholder="admin@maqnetkreasindo.com"
                             value={email}
                             onChange={(e) =>
                                 setEmail(e.target.value)

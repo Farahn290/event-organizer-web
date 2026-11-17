@@ -250,9 +250,9 @@ function Kontak() {
                             <span><small>{t("whatsappHotline")}</small><strong>+62 812-3456-7890</strong><em>{t("quickResponse")}</em></span>
                         </a>
 
-                        <a className="contact-info-row" href="mailto:hello@eventora.com">
+                        <a className="contact-info-row" href="mailto:hello@maqnetkreasindo.com">
                             <span className="contact-info-icon"><Mail size={15} aria-hidden="true" /></span>
-                            <span><small>{t("officialInquiry")}</small><strong>hello@eventora.com</strong><em>{t("proposalPartner")}</em></span>
+                            <span><small>{t("officialInquiry")}</small><strong>hello@maqnetkreasindo.com</strong><em>{t("proposalPartner")}</em></span>
                         </a>
 
                         <div className="contact-info-row">

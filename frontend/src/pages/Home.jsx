@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Award, PartyPopper, Smile, Users } from "lucide-react";
 import api from "../services/api";
+import { buildUploadUrl } from "../services/media";
 import { useLanguage } from "../contexts/LanguageContext";
 import homeHeroImage1 from "../assets/home-hero-1.png";
 import homeHeroImage2 from "../assets/home-hero-2.png";
@@ -319,13 +320,7 @@ function Home() {
                         {t("loadingEvents")}
                     </p>
 
-                ) : events.length === 0 ? (
-
-                    <p>
-                        {t("noEvents")}
-                    </p>
-
-                ) : (
+                ) : events.length > 0 && (
 
                     <div className="event-home-grid">
 
@@ -415,7 +410,7 @@ function Home() {
                             >
 
                                 <img
-                                    src={`http://localhost:8000/uploads/${item.gambar}`}
+                                    src={buildUploadUrl(item.gambar)}
                                     alt={item.judul}
                                 />
 

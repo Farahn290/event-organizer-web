@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ImagePlus } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { buildUploadUrl } from "../services/media";
 import { useLanguage } from "../contexts/LanguageContext";
 
 function Galeri() {
@@ -10,6 +11,7 @@ function Galeri() {
     const [galeri, setGaleri] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
+
     useEffect(() => {
 
         const getGaleri = async () => {
@@ -25,16 +27,17 @@ function Galeri() {
                     response.data
                 );
 
-                if (response.data.success) {
+                if (response.data?.success) {
+                    const galleryData = Array.isArray(response.data.data)
+                        ? response.data.data
+                        : [];
 
-                    setGaleri(
-                        response.data.data
-                    );
+                    setGaleri(galleryData);
 
                 } else {
 
                     setError(
-                        response.data.message ||
+                        response.data?.message ||
                         "Gagal mengambil data galeri"
                     );
 
@@ -64,6 +67,8 @@ function Galeri() {
 
     }, []);
 
+    const galleryItems = Array.isArray(galeri) ? galeri : [];
+
     return (
 
         <div className="page gallery-page">
@@ -90,24 +95,34 @@ function Galeri() {
                 {!loading && (
                     <div className="gallery-grid">
 
-                        {galeri.map((item) => (
-                            <article className="gallery-photo-card" key={item.id}>
-                                <img
-                                    src={`http://localhost:8000/uploads/${item.gambar}`}
-                                    alt={item.judul}
-                                />
-                                <span className="gallery-photo-category">{item.kategori || t("eventPhoto")}</span>
-                                <div className="gallery-photo-caption">
-                                    <h2>{item.judul}</h2>
-                                    {item.deskripsi && <p>{item.deskripsi}</p>}
-                                </div>
-                            </article>
-                        ))}
+                        {galleryItems.map((item) => {
+                            const imageUrl = buildUploadUrl(item.gambar);
+                            const imageAlt = item.judul || t("eventPhoto");
+
+                            return (
+                                <article className="gallery-photo-card" key={item.id ?? `${imageAlt}-${item.gambar}`}>
+                                    {imageUrl ? (
+                                        <img
+                                            src={imageUrl}
+                                            alt={imageAlt}
+                                            onError={(event) => {
+                                                event.currentTarget.style.display = "none";
+                                            }}
+                                        />
+                                    ) : null}
+                                    <span className="gallery-photo-category">{item.kategori || t("eventPhoto")}</span>
+                                    <div className="gallery-photo-caption">
+                                        <h2>{item.judul || t("eventPhoto")}</h2>
+                                        {item.deskripsi && <p>{item.deskripsi}</p>}
+                                    </div>
+                                </article>
+                            );
+                        })}
 
                         {Array.from(
-                            { length: Math.max(0, 9 - galeri.length) },
+                            { length: Math.max(0, 9 - galleryItems.length) },
                             (_, index) => {
-                                const slotNumber = galeri.length + index + 1;
+                                const slotNumber = galleryItems.length + index + 1;
 
                                 return (
                                     <Link

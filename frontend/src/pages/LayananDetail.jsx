@@ -119,15 +119,17 @@ function LayananDetail() {
                         <ArrowLeft size={16} aria-hidden="true" />
                         {t("allServices")}
                     </Link>
-                    <p className="service-detail-eyebrow">
-                        <Sparkles size={14} aria-hidden="true" />
-                        LAYANAN KAMI
-                    </p>
-                    <h1>{service.nama_layanan}</h1>
-                    <div className="service-detail-description">
-                        {(paragraphs.length > 0 ? paragraphs : [t("serviceInfoUnavailable")]).map((paragraph, index) => (
-                            <p key={`${index}-${paragraph}`}>{paragraph}</p>
-                        ))}
+                    <div className="service-detail-content-panel">
+                        <p className="service-detail-eyebrow">
+                            <Sparkles size={14} aria-hidden="true" />
+                            LAYANAN KAMI
+                        </p>
+                        <h1>{service.nama_layanan}</h1>
+                        <div className="service-detail-description">
+                            {(paragraphs.length > 0 ? paragraphs : [t("serviceInfoUnavailable")]).map((paragraph, index) => (
+                                <p key={`${index}-${paragraph}`}>{paragraph}</p>
+                            ))}
+                        </div>
                     </div>
                     <Link to="/kontak" className="service-detail-cta">
                         {t("consultService")}

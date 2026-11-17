@@ -1,0 +1,448 @@
+{
+  "info": {
+    "_postman_id": "c0de9f9e-0b2f-4f34-9c66-8c4f16fa1a09",
+    "name": "Event Organizer API",
+    "description": "Koleksi request API backend. Isi kredensial dan gunakan database uji sebelum menjalankan request yang mengubah atau menghapus data.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register peserta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"{{newParticipantName}}\",\n  \"email\": \"{{newParticipantEmail}}\",\n  \"password\": \"{{newParticipantPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/auth/register",
+            "description": "Expected: HTTP 201; data.role bernilai peserta. Gunakan email baru setiap kali register."
+          }
+        },
+        {
+          "name": "Login peserta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{pesertaEmail}}\",\n  \"password\": \"{{pesertaPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Expected: HTTP 200; token disimpan ke collection variable pesertaToken."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Login peserta berhasil', function () { pm.response.to.have.status(200); });",
+                "if (pm.response.code === 200) pm.collectionVariables.set('pesertaToken', pm.response.json().token);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Login panitia",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{panitiaEmail}}\",\n  \"password\": \"{{panitiaPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Expected: HTTP 200; token disimpan ke collection variable panitiaToken."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Login panitia berhasil', function () { pm.response.to.have.status(200); });",
+                "if (pm.response.code === 200) pm.collectionVariables.set('panitiaToken', pm.response.json().token);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Login admin",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{adminPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/auth/login",
+            "description": "Expected: HTTP 200; token disimpan ke collection variable adminToken."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Login admin berhasil', function () { pm.response.to.have.status(200); });",
+                "if (pm.response.code === 200) pm.collectionVariables.set('adminToken', pm.response.json().token);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Logout peserta",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Authorization", "value": "Bearer {{pesertaToken}}" }],
+            "url": "{{baseUrl}}/api/auth/logout",
+            "description": "Expected: HTTP 200. Logout stateless tidak mencabut token; hapus token di klien."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Profil",
+      "item": [
+        {
+          "name": "Lihat profil",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{pesertaToken}}" }],
+            "url": "{{baseUrl}}/api/profil",
+            "description": "Expected: HTTP 200; data berisi profil pemilik token."
+          }
+        },
+        {
+          "name": "Ubah profil",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{pesertaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama\": \"Peserta Uji\",\n  \"email\": \"{{pesertaEmail}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/profil",
+            "description": "Expected: HTTP 200; hanya profil pengguna terautentikasi yang berubah."
+          }
+        },
+        {
+          "name": "Ganti password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{pesertaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password_lama\": \"{{pesertaPassword}}\",\n  \"password_baru\": \"{{newParticipantPassword}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/profil/password",
+            "description": "Expected: HTTP 200 jika password lama benar. Password baru minimal 12 karakter."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Events",
+      "item": [
+        {
+          "name": "Daftar event",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/events?page=1&limit=20&q=",
+            "description": "Expected: HTTP 200; respons memuat data dan metadata pagination."
+          }
+        },
+        {
+          "name": "Buat event (panitia)",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{panitiaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_event\": \"Event Uji Postman\",\n  \"tanggal\": \"2026-12-01\",\n  \"lokasi\": \"Jakarta\",\n  \"deskripsi\": \"Data uji; hapus hanya di database uji.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/events/create",
+            "description": "Expected: HTTP 200; id respons disimpan ke eventId. Panitia menjadi pemilik event."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Event berhasil dibuat', function () { pm.response.to.have.status(200); });",
+                "if (pm.response.code === 200) pm.collectionVariables.set('eventId', pm.response.json().id);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Ubah event",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{panitiaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{eventId}}\",\n  \"nama_event\": \"Event Uji Postman Diperbarui\",\n  \"tanggal\": \"2026-12-01\",\n  \"lokasi\": \"Jakarta\",\n  \"deskripsi\": \"Data uji.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/events/update",
+            "description": "Expected: HTTP 200 untuk event milik panitia; event milik panitia lain ditolak dengan HTTP 403."
+          }
+        },
+        {
+          "name": "Hapus event (destruktif)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{panitiaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{eventId}}\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/events/delete",
+            "description": "Destruktif: jalankan hanya pada database uji. Expected: HTTP 200 untuk event milik panitia."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tiket",
+      "item": [
+        {
+          "name": "Daftar tiket event",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/events/{{eventId}}/tiket",
+            "description": "Publik. Expected: HTTP 200; tiap tiket memuat sisa_kuota = kuota - terjual."
+          }
+        },
+        {
+          "name": "Buat tiket",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{panitiaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_tiket\": \"Tiket Uji\",\n  \"harga\": \"100000.00\",\n  \"kuota\": 20\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/events/{{eventId}}/tiket",
+            "description": "Expected: HTTP 201; id respons disimpan ke ticketId. Panitia pada event milik panitia lain menerima HTTP 403."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Tiket berhasil dibuat', function () { pm.response.to.have.status(201); });",
+                "if (pm.response.code === 201) pm.collectionVariables.set('ticketId', pm.response.json().id);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Ubah tiket",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{panitiaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nama_tiket\": \"Tiket Uji Diperbarui\",\n  \"harga\": \"125000.00\",\n  \"kuota\": 20\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/events/{{eventId}}/tiket/{{ticketId}}",
+            "description": "Expected: HTTP 200. Kuota di bawah terjual ditolak dengan HTTP 409."
+          }
+        },
+        {
+          "name": "Hapus tiket (destruktif)",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "Authorization", "value": "Bearer {{panitiaToken}}" }],
+            "url": "{{baseUrl}}/api/events/{{eventId}}/tiket/{{ticketId}}",
+            "description": "Destruktif: hanya untuk data uji. Tiket terjual atau yang direferensikan pendaftaran ditolak dengan HTTP 409."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pendaftaran",
+      "item": [
+        {
+          "name": "Buat pendaftaran",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{pesertaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tiket_id\": \"{{ticketId}}\",\n  \"jumlah\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/pendaftaran",
+            "description": "Expected: HTTP 201; data.id disimpan ke pendaftaranId dan status bernilai pending. Kuota habis menghasilkan HTTP 409."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Pendaftaran berhasil dibuat', function () { pm.response.to.have.status(201); });",
+                "if (pm.response.code === 201) pm.collectionVariables.set('registrationId', pm.response.json().data.id);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Lihat pendaftaran saya",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{pesertaToken}}" }],
+            "url": "{{baseUrl}}/api/pendaftaran/saya?page=1&limit=20&status=",
+            "description": "Expected: HTTP 200; hanya pendaftaran peserta terautentikasi yang dikembalikan."
+          }
+        },
+        {
+          "name": "Daftar peserta event",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{panitiaToken}}" }],
+            "url": "{{baseUrl}}/api/events/{{eventId}}/pendaftaran?page=1&limit=20",
+            "description": "Expected: HTTP 200 untuk event milik panitia; event milik panitia lain menghasilkan HTTP 403."
+          }
+        },
+        {
+          "name": "Batalkan pendaftaran",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{pesertaToken}}" }],
+            "url": "{{baseUrl}}/api/pendaftaran/{{registrationId}}/batal",
+            "description": "Expected: HTTP 200 untuk status pending; kuota dikembalikan. Pendaftaran selain pending menghasilkan HTTP 409."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Transaksi",
+      "item": [
+        {
+          "name": "Buat tagihan",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{pesertaToken}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pendaftaran_id\": \"{{registrationId}}\",\n  \"metode\": \"transfer bank\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": "{{baseUrl}}/api/transaksi",
+            "description": "Expected: HTTP 201; total = harga tiket x jumlah dan status pending. Tagihan aktif duplikat menghasilkan HTTP 409."
+          },
+          "event": [{
+            "listen": "test",
+            "script": {
+              "type": "text/javascript",
+              "exec": [
+                "pm.test('Tagihan berhasil dibuat', function () { pm.response.to.have.status(201); });",
+                "if (pm.response.code === 201) pm.collectionVariables.set('transactionId', pm.response.json().data.id);"
+              ]
+            }
+          }]
+        },
+        {
+          "name": "Lihat transaksi saya",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{pesertaToken}}" }],
+            "url": "{{baseUrl}}/api/transaksi/saya?page=1&limit=20&status=",
+            "description": "Expected: HTTP 200; hanya transaksi milik peserta terautentikasi yang dikembalikan."
+          }
+        },
+        {
+          "name": "Rekap transaksi event",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "Authorization", "value": "Bearer {{panitiaToken}}" }],
+            "url": "{{baseUrl}}/api/transaksi/rekap?event_id={{eventId}}&page=1&limit=20",
+            "description": "Expected: HTTP 200; rekap panitia hanya mencakup event miliknya."
+          }
+        },
+        {
+          "name": "Konfirmasi pembayaran (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Authorization", "value": "Bearer {{adminToken}}" }],
+            "url": "{{baseUrl}}/api/transaksi/{{transactionId}}/konfirmasi",
+            "description": "Expected: HTTP 200; transaksi menjadi paid dan pendaftaran menjadi confirmed. Hanya admin yang diizinkan."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/health",
+            "description": "Expected: HTTP 200 jika API dapat terhubung ke database."
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8000", "type": "string" },
+    { "key": "adminEmail", "value": "", "type": "string" },
+    { "key": "adminPassword", "value": "", "type": "string" },
+    { "key": "panitiaEmail", "value": "", "type": "string" },
+    { "key": "panitiaPassword", "value": "", "type": "string" },
+    { "key": "pesertaEmail", "value": "", "type": "string" },
+    { "key": "pesertaPassword", "value": "", "type": "string" },
+    { "key": "newParticipantName", "value": "Peserta Black Box", "type": "string" },
+    { "key": "newParticipantEmail", "value": "", "type": "string" },
+    { "key": "newParticipantPassword", "value": "", "type": "string" },
+    { "key": "adminToken", "value": "", "type": "string" },
+    { "key": "panitiaToken", "value": "", "type": "string" },
+    { "key": "pesertaToken", "value": "", "type": "string" },
+    { "key": "eventId", "value": "", "type": "string" },
+    { "key": "ticketId", "value": "", "type": "string" },
+    { "key": "registrationId", "value": "", "type": "string" },
+    { "key": "transactionId", "value": "", "type": "string" }
+  ]
+}

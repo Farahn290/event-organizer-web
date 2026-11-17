@@ -1,3 +1,4 @@
+import { buildUploadUrl } from "../services/media";
 import layananFeatureImage from "../assets/layanan-feature.png";
 import miceEventImage from "../assets/mice-event.png";
 import brandActivationImage from "../assets/brand-activation.png";
@@ -37,7 +38,7 @@ export const getServiceImage = (item, index = 0) => {
             return item.gambar;
         }
 
-        return `http://localhost:8000/uploads/${item.gambar}`;
+        return buildUploadUrl(item.gambar);
     }
 
     return serviceEventImages[index % serviceEventImages.length];
@@ -64,27 +65,27 @@ export const moreServiceCard = {
 
 export const sampleServices = [
     {
-        id: "sample-wedding",
+        id: "sample-Corporate",
         nama_layanan: "CORPORATE EVENT",
         deskripsi: "Solusi acara bisnis eksklusif untuk peluncuran produk, corporate gathering, maupun awarding night berkelas. Pengelolaan end-to-end mencakup konsep tematik, stage design, pengisi acara ternama, hingga cinderamata VIP."
     },
     {
-        id: "sample-birthday",
+        id: "sample-Mice",
         nama_layanan: "MICE EVENT",
         deskripsi: "Layanan komprehensif penyelenggaraan konferensi, seminar korporat, pameran akbar, hingga program insentif perjalanan. Didukung teknologi mutakhir, koordinasi logistik terpadu, dan manajemen peserta profesional."
     },
     {
-        id: "sample-corporate",
+        id: "sample-Brand",
         nama_layanan: "BRAND ACTIVATION",
         deskripsi: "Menghidupkan identitas brand Anda melalui kampanye kreatif, peluncuran produk tematik, dan aksi langsung yang memikat. Dirancang untuk menciptakan impresi kuat, interaksi organik, serta eksposur maksimal."
     },
     {
-        id: "sample-concert",
+        id: "sample-Ceremonial",
         nama_layanan: "CEREMONIAL EVENTS",
         deskripsi: "Solusi profesional untuk perhelatan seremonial resmi berstandar tinggi. Menangani grand opening, awarding resmi, dan momen perayaan penting dengan tata visual canggih, alur protokoler rapi, serta koordinasi tanpa cela."
     },
     {
-        id: "sample-seminar",
+        id: "sample-Music",
         nama_layanan: "MUSIC EVENT",
         deskripsi: "Rasakan energi konser live yang tak terlupakan. Kami mengelola segala aspek untuk perhelatan musik Anda: manajemen tiket yang efisien, penyediaan peralatan panggung berstandar tinggi, tata pencahayaan spektakuler, hingga sistem keamanan yang ketat."
     }

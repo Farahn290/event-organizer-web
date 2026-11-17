@@ -130,9 +130,9 @@ function Footer() {
                         <span>{t("jakarta")}</span>
                     </a>
 
-                    <a className="footer-contact-link" href="mailto:hello@eventora.com">
+                    <a className="footer-contact-link" href="mailto:hello@maqnetkreasindo.com">
                         <Mail size={15} aria-hidden="true" />
-                        <span>hello@eventora.com</span>
+                        <span>hello@maqnetkreasindo.com</span>
                     </a>
 
                     <a className="footer-contact-link" href="https://wa.me/6281234567890">

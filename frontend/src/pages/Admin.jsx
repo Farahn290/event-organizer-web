@@ -1,12 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
+import { buildUploadUrl } from "../services/media";
 
 function Admin() {
 
     const navigate = useNavigate();
 
-    const [admin, setAdmin] = useState(null);
+    const [admin] = useState(() => {
+        if (!localStorage.getItem("adminToken")) return null;
+        try {
+            return JSON.parse(localStorage.getItem("admin") || "null");
+        } catch {
+            return null;
+        }
+    });
 
     // =========================
     // LAYANAN
@@ -37,6 +45,8 @@ function Admin() {
 
     const [galeri, setGaleri] = useState([]);
 
+    const [kontak, setKontak] = useState([]);
+
     const [judulGaleri, setJudulGaleri] = useState("");
     const [gambarGaleri, setGambarGaleri] = useState([]);
     const [deskripsiGaleri, setDeskripsiGaleri] = useState("");
@@ -44,27 +54,6 @@ function Admin() {
 
     const [editingGaleriId, setEditingGaleriId] = useState(null);
     const [gambarLama, setGambarLama] = useState("");
-
-    // =========================
-    // LOAD DATA
-    // =========================
-
-    useEffect(() => {
-
-        const adminData = localStorage.getItem("admin");
-
-        if (!adminData) {
-            navigate("/login");
-            return;
-        }
-
-        setAdmin(JSON.parse(adminData));
-
-        getLayanan();
-        getEvents();
-        getGaleri();
-
-    }, [navigate]);
 
     // =========================
     // GET LAYANAN
@@ -373,6 +362,53 @@ function Admin() {
 
     };
 
+    const getKontak = async () => {
+        try {
+            const response = await api.get("/kontak/");
+            if (response.data.success) setKontak(response.data.data);
+        } catch (error) {
+            console.error("Gagal mengambil pesan kontak:", error);
+        }
+    };
+
+    const handleKontakDelete = async (id) => {
+        if (!window.confirm("Yakin ingin menghapus pesan kontak ini?")) return;
+
+        try {
+            await api.delete("/kontak/delete", { data: { id } });
+            await getKontak();
+        } catch (error) {
+            console.error("Gagal menghapus pesan kontak:", error);
+            alert(error.response?.data?.message || "Gagal menghapus pesan kontak");
+        }
+    };
+
+    // =========================
+    // LOAD DATA
+    // =========================
+
+    useEffect(() => {
+        if (!admin || !localStorage.getItem("adminToken")) {
+            localStorage.removeItem("admin");
+            localStorage.removeItem("adminToken");
+            navigate("/login");
+            return;
+        }
+
+        let isActive = true;
+        queueMicrotask(() => {
+            if (!isActive) return;
+            getLayanan();
+            getEvents();
+            getGaleri();
+            getKontak();
+        });
+
+        return () => {
+            isActive = false;
+        };
+    }, [admin, navigate]);
+
     // =========================
     // SUBMIT GALERI
     // =========================
@@ -552,6 +588,7 @@ function Admin() {
     const handleLogout = () => {
 
         localStorage.removeItem("admin");
+        localStorage.removeItem("adminToken");
 
         navigate("/login");
 
@@ -1098,7 +1135,7 @@ function Admin() {
                                 </p>
 
                                 <img
-                                    src={`http://localhost:8000/uploads/${gambarLama}`}
+                                    src={buildUploadUrl(gambarLama)}
                                     alt="Gambar lama"
                                     style={{
                                         width: "200px",
@@ -1191,7 +1228,7 @@ function Admin() {
                         >
 
                             <img
-                                src={`http://localhost:8000/uploads/${item.gambar}`}
+                                src={buildUploadUrl(item.gambar)}
                                 alt={item.judul}
                                 style={{
                                     width: "100%",
@@ -1259,6 +1296,54 @@ function Admin() {
 
                 </div>
 
+            </section>
+
+            <section
+                style={{
+                    maxWidth: "1200px",
+                    margin: "0 auto 40px",
+                    background: "#fff",
+                    padding: "30px",
+                    boxSizing: "border-box"
+                }}
+            >
+                <h2>Pesan Kontak</h2>
+                {kontak.length === 0 && <p>Belum ada pesan kontak.</p>}
+                {kontak.map((item) => (
+                    <article
+                        key={item.id}
+                        style={{
+                            borderTop: "1px solid #ddd",
+                            padding: "20px 0",
+                            display: "flex",
+                            justifyContent: "space-between",
+                            alignItems: "flex-start",
+                            gap: "20px"
+                        }}
+                    >
+                        <div>
+                            <h3>{item.nama}</h3>
+                            <p>
+                                <a href={`mailto:${item.email}`}>{item.email}</a>
+                                {item.no_hp && <> · <a href={`tel:${item.no_hp}`}>{item.no_hp}</a></>}
+                            </p>
+                            <p>{new Date(item.created_at).toLocaleString()}</p>
+                            <p style={{ whiteSpace: "pre-wrap" }}>{item.pesan}</p>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() => handleKontakDelete(item.id)}
+                            style={{
+                                padding: "8px 15px",
+                                background: "#111",
+                                color: "#fff",
+                                border: "none"
+                            }}
+                        >
+                            Hapus
+                        </button>
+                    </article>
+                ))}
             </section>
 
         </div>

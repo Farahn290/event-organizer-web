@@ -1,18 +1,10 @@
 import { useEffect, useState } from "react";
-import { useMemo } from "react";
 import { ArrowRight, ChevronLeft, ChevronRight, Images, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { buildUploadUrl } from "../services/media";
 import { useLanguage } from "../contexts/LanguageContext";
 
-const categories = ["All Events", "Wedding", "Birthday", "Corporate", "Concert"];
-const categoryTranslationKeys = {
-    "All Events": "allEvents",
-    Wedding: "wedding",
-    Birthday: "birthday",
-    Corporate: "corporate",
-    Concert: "concert"
-};
 const categoryDescriptionKeys = {
     Wedding: "eventDescriptionWedding",
     Birthday: "eventDescriptionBirthday",
@@ -20,64 +12,88 @@ const categoryDescriptionKeys = {
     Concert: "eventDescriptionConcert"
 };
 const eventGalleryAccents = ["#f2ca75", "#62e4ea", "#9b9bff", "#f4a77b", "#62e4ea", "#9b9bff"];
+const isStrategicIfgGathering = (event) => (
+    /my\s*pertamina\s*metaverse|gathering\s+mitra\s+strategis\s+ifg/i.test(event.nama_event || "")
+);
+const strategicIfgGatheringDescription = "Penyelenggaraan acara gathering mitra strategis yang mempertemukan jajaran perusahaan, mitra bisnis, dan pemangku kepentingan. Acara ini dirancang sebagai wadah mempererat hubungan kerja sama, membangun komunikasi, serta memperkuat sinergi dalam mencapai tujuan bisnis bersama.";
+const isFestivalKoplo = (event) => /festival\s+koplo/i.test(event.nama_event || "");
+const festivalKoploDescription = "Penyelenggaraan festival musik koplo yang berkolaborasi dengan Pertamina, menghadirkan hiburan musik secara langsung dengan suasana meriah dan interaktif. Acara ini menggabungkan pertunjukan musik, aktivasi brand, serta pengalaman hiburan bagi masyarakat untuk meningkatkan antusiasme pengunjung dan memperkuat kedekatan brand dengan audiens.";
+const isNusantaraSkyEvent = (event) => /nusantara\s+sky/i.test(event.nama_event || "");
+const nusantaraSkyDescription = "Penyelenggaraan event olahraga dirgantara Nusantara SKY yang menghadirkan pertunjukan terjun payung (skydiving) dengan aksi penerjunan spektakuler dari atlet profesional. Acara ini menggabungkan atraksi udara, hiburan, serta pengalaman menarik bagi pengunjung dalam suasana yang meriah dan penuh antusiasme.";
+const auraSymphonyPhotos = [
+    "/aura-symphony-event-photo.png",
+    "/aura-symphony-gallery-2.png",
+    "/aura-symphony-gallery-3.png",
+    "/aura-symphony-gallery-4.png",
+    "/aura-symphony-gallery-5.png",
+    "/aura-symphony-gallery-6.png"
+];
+const luxeEmeraldPhotos = [
+    "/luxe-emerald-gallery-1.png",
+    "/luxe-emerald-gallery-2.png",
+    "/luxe-emerald-gallery-3.png",
+    "/luxe-emerald-gallery-4.png",
+    "/luxe-emerald-gallery-5.png",
+    "/luxe-emerald-gallery-6.png",
+    "/luxe-emerald-gallery-7.png"
+];
 
 const sampleEvents = [
     {
         id: "archive-wedding",
         nama_event: "MYPERTAMINA X TURBO",
         tanggal: "2023",
-        lokasi: "HotelSarina",
+        lokasi: "jakarta teater",
         kategori: "Wedding",
         label: "MYPERTAMINA",
-        produksi: " ",
         gambar: "/wedding-2025-pertamina-display.png"
     },
     {
         id: "archive-concert",
         nama_event: "BRIGHT GAS",
         tanggal: "2025",
-        lokasi: "Mall Sarinah Jakarta)",
+        lokasi: "Mall Sarinah Jakarta",
         kategori: "Concert",
         label: "IHC & BRIGHT GAS",
-        produksi: "",
-        gambar: "/concert-2025-brightgas.png"
+        gambar: "/concert-2025-brightgas.png",
+        deskripsi: "Aktivasi brand Bright Gas melalui penyelenggaraan event interaktif yang menghadirkan pengalaman menarik bagi pengunjung. Menggabungkan konsep pameran, hiburan, dan promosi produk dengan desain area yang atraktif untuk meningkatkan brand awareness dan keterlibatan audiens."
     },
     {
         id: "archive-corporate",
-        nama_event: "Indonesia Financial TeamGroup.",
+        nama_event: "Indonesia Financial Group",
         tanggal: "2025",
         lokasi: "Jakarta International Convention Center",
-        kategori: "Corporate",
-        produksi: "",
-        gambar: "/corporate-2025-ifg.png"
+        kategori: "IFG & Danantara",
+        gambar: "/corporate-2025-ifg.png",
+        deskripsi: "Penyelenggaraan acara korporat Indonesia Financial Group yang mencakup konferensi, seminar, dan pertemuan bisnis. Menghadirkan pengelolaan acara secara profesional mulai dari penataan venue, panggung, audiovisual, hingga koordinasi peserta untuk menciptakan acara yang tertata dan berkesan."
     },
     {
         id: "archive-birthday",
-        nama_event: "FESTIVAL KOPLO",
+        nama_event: "FESTIVAL KOPLO X PERTAMINA",
         tanggal: "2026",
         lokasi: "Jakarta Senayan",
         kategori: "Concert",
-        label: "FESTIVAL KOPLO",
-        produksi: "",
-        gambar: "/festival-koplo-gallery-1.png"
+        label: "FESTIVAL KOPLO X PERTAMINA",
+        gambar: "/festival-koplo-gallery-1.png",
+        deskripsi: festivalKoploDescription
     },
     {
         id: "archive-symphony",
-        nama_event: "Aura Symphony Orchestral Night",
+        nama_event: "Nusantara SKY",
         tanggal: "2025",
-        lokasi: "Grand Theater Hall, Surabaya (1,800 Seats)",
-        kategori: "Concert",
-        produksi: "ACOUSTIC ENGINEERING",
-        gambar: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=1000&q=85"
+        lokasi: "Puncak, Bogor Cisarua",
+        kategori: "Adventure",
+        gambar: "/aura-symphony-cover.png",
+        deskripsi: nusantaraSkyDescription
     },
     {
         id: "archive-nuptials",
-        nama_event: "Luxe Emerald Botanical Nuptials",
+        nama_event: "GATHERING MITRA STRATEGIS IFG",
         tanggal: "2026",
-        lokasi: "Alila Villas Uluwatu, Bali (350 Guests)",
-        kategori: "Wedding",
-        produksi: "DESTINATION NUPTIALS",
-        gambar: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=1000&q=85"
+        lokasi: "Hotel borobudur",
+        kategori: "Brand",
+        gambar: "/luxe-emerald-botanical-photo.png",
+        deskripsi: strategicIfgGatheringDescription
     }
 ];
 
@@ -92,6 +108,19 @@ const myPertaminaTestPhotos = [
     "/mypertamina-gallery-8.png",
     "/mypertamina-gallery-9.png",
     "/mypertamina-gallery-10.png"
+];
+
+const myPertaminaMetaversePhotos = [
+    "/mypertamina-metaverse-gallery-1.png",
+    "/mypertamina-metaverse-gallery-2.png",
+    "/mypertamina-metaverse-gallery-3.png",
+    "/mypertamina-metaverse-gallery-4.png",
+    "/mypertamina-metaverse-gallery-5.png",
+    "/mypertamina-metaverse-gallery-6.png",
+    "/mypertamina-metaverse-gallery-7.png",
+    "/mypertamina-metaverse-gallery-8.png",
+    "/mypertamina-metaverse-gallery-9.png",
+    "/mypertamina-metaverse-gallery-10.png"
 ];
 
 const brightGasTestPhotos = [
@@ -150,38 +179,43 @@ const eventImage = (event, index) => (
         : event.gambar
             ? event.gambar.startsWith("/")
                 ? event.gambar
-                : `http://localhost:8000/uploads/${event.gambar}`
+                : buildUploadUrl(event.gambar)
             : sampleEvents[index % sampleEvents.length].gambar
 );
 
-const galleryImage = (image) => {
-    if (!image) return "";
-    if (image.startsWith("http") || image.startsWith("/")) return image;
-    return `http://localhost:8000/uploads/${image}`;
-};
-
 const galleryPhotosFor = (event, coverImage) => {
     const eventPhotos = Array.isArray(event.galeri)
-        ? event.galeri.map((photo) => galleryImage(photo.gambar)).filter(Boolean)
+        ? event.galeri.map((photo) => buildUploadUrl(photo.gambar)).filter(Boolean)
         : [];
-    const isFestivalKoploEvent = /festival\s+koplo/i.test(event.nama_event || "");
+    const isFestivalKoploEvent = isFestivalKoplo(event);
     const isMyPertaminaEvent = /mypertamina/i.test(event.nama_event || "");
+    const isMyPertaminaMetaverseEvent = isStrategicIfgGathering(event);
     const isBrightGasEvent = /bright\s*gas/i.test(event.nama_event || "");
+    const isAuraSymphonyEvent = /aura\s+symphony|nusantara\s+sky/i.test(event.nama_event || "");
+    const isLuxeEmeraldEvent = /luxe\s+emerald\s+botanical\s+nuptials/i.test(event.nama_event || "");
     const isIfgEvent = /\bifg\b|financial.*group/i.test(event.nama_event || "");
+    if (isMyPertaminaMetaverseEvent) {
+        return myPertaminaMetaversePhotos;
+    }
+
     if (isFestivalKoploEvent) {
         return [...eventPhotos, ...festivalKoploPhotos]
             .filter((photo, index, photos) => photo && photos.indexOf(photo) === index);
     }
 
-    const photos = isIfgEvent
-        ? [...eventPhotos, ...ifgTestPhotos]
-        : isBrightGasEvent
-            ? [...(eventPhotos.length > 0 ? eventPhotos : brightGasTestPhotos), coverImage]
-        : eventPhotos.length > 0
-            ? eventPhotos
-            : isMyPertaminaEvent
-                ? myPertaminaTestPhotos
-                : [coverImage];
+    const photos = isAuraSymphonyEvent
+        ? [...eventPhotos, coverImage, ...auraSymphonyPhotos]
+        : isLuxeEmeraldEvent
+            ? [...eventPhotos, coverImage, ...luxeEmeraldPhotos]
+            : isIfgEvent
+                ? [...eventPhotos, ...ifgTestPhotos]
+                : isBrightGasEvent
+                    ? [...(eventPhotos.length > 0 ? eventPhotos : brightGasTestPhotos), coverImage]
+                    : eventPhotos.length > 0
+                        ? eventPhotos
+                        : isMyPertaminaEvent
+                            ? myPertaminaTestPhotos
+                            : [coverImage];
 
     return photos.filter((photo, index) => photo && photos.indexOf(photo) === index);
 };
@@ -192,7 +226,6 @@ function Event() {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [activeCategory, setActiveCategory] = useState("All Events");
     const [selectedGallery, setSelectedGallery] = useState(null);
     const [activePhotoIndex, setActivePhotoIndex] = useState(0);
 
@@ -273,12 +306,6 @@ function Event() {
 
     }, []);
 
-    const visibleEvents = useMemo(() => (
-        activeCategory === "All Events"
-            ? events
-            : events.filter((event, index) => categoryByName(event, index) === activeCategory)
-    ), [activeCategory, events]);
-
     return (
         <div className="page event-archive-page">
 
@@ -291,17 +318,9 @@ function Event() {
                     </div>
 
                     <div className="event-filters" role="group" aria-label={t("categoryFilter")}>
-                        {categories.map((category) => (
-                            <button
-                                type="button"
-                                key={category}
-                                className={activeCategory === category ? "active" : ""}
-                                aria-pressed={activeCategory === category}
-                                onClick={() => setActiveCategory(category)}
-                            >
-                                {t(categoryTranslationKeys[category])}
-                            </button>
-                        ))}
+                        <button type="button" className="active" aria-pressed="true">
+                            {t("allEvents")}
+                        </button>
                     </div>
                 </header>
 
@@ -309,25 +328,48 @@ function Event() {
 
                 {!loading && error && <p className="event-archive-state" role="alert">{error}</p>}
 
-                {!loading && visibleEvents.length === 0 && (
+                {!loading && events.length === 0 && (
                     <p className="event-archive-state">{t("noEventsCategory")}</p>
                 )}
 
-                {!loading && !error && visibleEvents.length > 0 && (
+                {!loading && !error && events.length > 0 && (
                     <div className="event-archive-grid">
-                        {visibleEvents.map((event, index) => {
-                            const category = categoryByName(event, index);
+                        {events.map((event, index) => {
+                            const isNusantaraSky = isNusantaraSkyEvent(event);
+                            const category = isNusantaraSky ? "Adventure" : categoryByName(event, index);
                             const year = String(event.tanggal || "").match(/\d{4}/)?.[0] || "2025";
-                            const image = year === "2025" && category === "Wedding"
-                                ? "/wedding-2025-pertamina-display.png"
-                                : year === "2025" && category === "Concert"
-                                    ? "/concert-2025-brightgas.png"
-                                    : year === "2025" && category === "Corporate"
-                                        ? "/corporate-2025-ifg.png"
-                                    : eventImage(event, index);
+                            const isStrategicIfgGatheringEvent = isStrategicIfgGathering(event);
+                            const isFestivalKoploEvent = isFestivalKoplo(event);
+                            const eventName = isStrategicIfgGatheringEvent
+                                ? "GATHERING MITRA STRATEGIS IFG"
+                                : isFestivalKoploEvent
+                                    ? "FESTIVAL KOPLO X PERTAMINA"
+                                    : event.nama_event;
+                            const isAuraSymphonyEvent = /aura\s+symphony|nusantara\s+sky/i.test(event.nama_event || "");
+                            const isLuxeEmeraldEvent = /luxe\s+emerald\s+botanical\s+nuptials/i.test(event.nama_event || "");
+                            const image = isAuraSymphonyEvent
+                                ? "/aura-symphony-cover.png"
+                                : isLuxeEmeraldEvent
+                                    ? "/luxe-emerald-botanical-photo.png"
+                                    : year === "2025" && category === "Wedding"
+                                    ? "/wedding-2025-pertamina-display.png"
+                                    : year === "2025" && category === "Concert"
+                                        ? "/concert-2025-brightgas.png"
+                                        : year === "2025" && category === "Corporate"
+                                            ? "/corporate-2025-ifg.png"
+                                            : eventImage(event, index);
                             const photoCount = galleryPhotosFor(event, image).length;
-                            const description = event.deskripsi?.trim()
-                                || t(categoryDescriptionKeys[category] || "eventDescriptionDefault");
+                            const description = isStrategicIfgGatheringEvent
+                                ? strategicIfgGatheringDescription
+                                : isFestivalKoploEvent
+                                    ? festivalKoploDescription
+                                    : isNusantaraSky
+                                        ? nusantaraSkyDescription
+                                        : event.deskripsi?.trim()
+                                            || t(categoryDescriptionKeys[category] || "eventDescriptionDefault");
+                            const presentedEvent = eventName === event.nama_event
+                                ? event
+                                : { ...event, nama_event: eventName };
 
                             return (
                                 <article
@@ -335,18 +377,18 @@ function Event() {
                                     key={event.id}
                                     role="button"
                                     tabIndex={0}
-                                    aria-label={t("seeEventGallery", { count: photoCount, name: event.nama_event })}
-                                    onClick={() => openGallery(event, image, index)}
+                                    aria-label={t("seeEventGallery", { count: photoCount, name: eventName })}
+                                    onClick={() => openGallery(presentedEvent, image, index)}
                                     onKeyDown={(keyEvent) => {
                                         if (keyEvent.target !== keyEvent.currentTarget) return;
                                         if (keyEvent.key === "Enter" || keyEvent.key === " ") {
                                             keyEvent.preventDefault();
-                                            openGallery(event, image, index);
+                                            openGallery(presentedEvent, image, index);
                                         }
                                     }}
                                 >
                                     <div className={`event-archive-image${category === "Concert" && year === "2025" ? " event-archive-image--concert-2025" : ""}${event.id === "archive-birthday" ? " event-archive-image--full" : ""}`}>
-                                        <img src={image} alt={event.nama_event} />
+                                        <img src={image} alt={eventName} />
                                         <span className="event-archive-date">{year}</span>
                                         <span className="event-archive-gallery-hint">
                                             <Images size={13} aria-hidden="true" />
@@ -357,10 +399,10 @@ function Event() {
                                         </span>
                                     </div>
                                     <span className="event-archive-tag">
-                                        {(event.label || category).toUpperCase()}
+                                        {(isFestivalKoploEvent ? eventName : isNusantaraSky ? "ADVENTURE" : event.label || category).toUpperCase()}
                                     </span>
                                     <div className="event-archive-card-body">
-                                        <h2>{event.nama_event}</h2>
+                                        <h2>{eventName}</h2>
                                         <p className="event-archive-location">
                                             <MapPin size={12} aria-hidden="true" />
                                             <span>{event.lokasi}</span>
@@ -370,7 +412,7 @@ function Event() {
                                             <span>{event.produksi || sampleEvents[index % sampleEvents.length].produksi}</span>
                                             <Link
                                                 to="/kontak"
-                                                aria-label={t("eventConsultation", { name: event.nama_event })}
+                                                aria-label={t("eventConsultation", { name: eventName })}
                                                 onClick={(clickEvent) => clickEvent.stopPropagation()}
                                                 onKeyDown={(keyEvent) => keyEvent.stopPropagation()}
                                             >
